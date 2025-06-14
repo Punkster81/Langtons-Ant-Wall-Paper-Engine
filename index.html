@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8" />
+    <title>Langton's Ant</title>
+    <style>
+        body,
+        html {
+            margin: 0;
+            overflow: hidden;
+            background: black;
+            font-family: Arial, sans-serif;
+        }
+
+        canvas {
+            display: block;
+        }
+
+        .controls {
+            position: absolute;
+            top: 1vh;
+            left: 1vw;
+            color: white;
+            background: rgba(0, 0, 0, 0.7);
+            padding: 1.5vh 2vw;
+            border-radius: 0.8vh;
+            font-size: 1.4vmin;
+            z-index: 100;
+            max-width: 25vw;
+            min-width: 20vw;
+        }
+
+        .controls label {
+            display: block;
+            margin: 0.8vh 0;
+        }
+
+        .controls input[type="range"] {
+            width: 12vw;
+            margin-left: 1vw;
+            height: 0.6vh;
+        }
+
+        .controls input[type="number"] {
+            width: 5vw;
+            margin-left: 1vw;
+            font-size: 1vmin;
+            padding: 0.3vh;
+        }
+
+        .controls button {
+            margin: 0.8vh 1vw 0.8vh 0;
+            padding: 0.8vh 1.5vw;
+            background: #333;
+            color: white;
+            border: none;
+            border-radius: 0.5vh;
+            cursor: pointer;
+            font-size: 1.4vmin;
+        }
+
+        .controls button:hover {
+            background: #555;
+        }
+
+        .error {
+            color: #ff6666;
+            font-size: 1vmin;
+            margin-top: 0.8vh;
+        }
+
+        .controls-hidden {
+            display: none;
+        }
+
+        .show-controls-btn {
+            position: absolute;
+            top: 1vh;
+            left: 1vw;
+            background: rgba(0, 0, 0, 0.8);
+            color: white;
+            border: none;
+            border-radius: 50%;
+            width: 5vh;
+            height: 5vh;
+            font-size: 2vh;
+            cursor: pointer;
+            z-index: 100;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: all 0.3s ease;
+        }
+
+        .show-controls-btn:hover {
+            background: rgba(0, 0, 0, 0.9);
+            transform: scale(1.1);
+        }
+
+        .show-controls-btn.visible {
+            display: flex;
+        }
+    </style>
+</head>
+
+<body>
+    <canvas id="canvas"></canvas>
+
+
+    <div class="controls" id="controls">
+
+        <!-- Basic Controls -->
+        <label>
+            Cell Size:
+            <input type="range" id="cellSize" min="1" value="6">
+            <span id="cellSizeValue">6</span>px
+        </label>
+
+        <label>
+            Steps per Second:
+            <input type="range" id="stepsPerFrame" min="0" max="100" value="20">
+            <span id="stepsValue">100</span>
+        </label>
+
+        <label>
+            Number of Colors:
+            <input type="number" id="inputColors" min="2" value="2">
+        </label>
+
+        <label>
+            Number of States:
+            <input type="number" id="inputStates" min="1" value="1">
+        </label>
+
+        <!-- Rule Controls -->
+        <label for="customStates">Rules: (JSON):</label>
+        <textarea id="customStates" rows="6"
+            style="width: 100%; font-size: 1.15vmin; resize: vertical; overflow-x: auto;"></textarea>
+        <button id="applyStatesBtn">Apply Rules</button>
+        <button id="randomRules">Randomize Rules</button>
+
+        <!-- Import/Export -->
+        <div style="margin-top: 8px;">
+            <button onclick="exportJSON()" title="Export Rules">📤</button>
+            <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="importJSON(event)">
+            <button onclick="document.getElementById('jsonFileInput').click()" title="Import Rules">📥</button>
+        </div>
+
+        <!-- Simulation Controls -->
+        <div style="margin-top: 8px; display: flex; gap: 8px;">
+            <button id="pauseResumeBtn" title="Pause / Resume Simulation">⏸️</button>
+            <button id="resetBtn" title="Reset Simulation">🔄</button>
+            <button id="saveCanvas" title="Save Canvas Image">💾</button>
+            <button id="toggleBtn" title="Hide Controls">➖</button>
+        </div>
+
+        <!-- Info & Errors -->
+        <div style="margin-top: 10px; opacity: 0.7;">
+            Grid: <span id="gridInfo"></span>
+        </div>
+        <div id="errorMsg" class="error"></div>
+
+    </div>
+
+
+    <button class="show-controls-btn" id="showControlsBtn">⚙</button>
+
+    <script src="customRules.js"></script>
+    <script src="main.js"></script>
+    <script src="UIControl.js"></script>
+    <script src="animation.js"></script>
+    <script src="gridDrawing.js"></script>
+
+
+
+</body>
+
+</html>
