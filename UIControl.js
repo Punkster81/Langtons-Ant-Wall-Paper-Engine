@@ -23,9 +23,7 @@ function toggleControls() {
 
         controls.classList.remove('controls-hidden');
         showBtn.classList.remove('visible');
-        const rulesText = document.getElementById('customStates');
 
-        resizeTextarea(rulesText); // Resize once on page load
     } else {
 
         controls.classList.add('controls-hidden');
@@ -79,10 +77,10 @@ function setUI() {
 
 
     document.getElementById('pauseResumeBtn').addEventListener('click', () => {
-        if (!isPaused) {
-            pauseAnimation();
+        if (isRunning) {
+            stopAnimation();
         } else {
-            unpauseAnimation();
+            startAnimation();
         }
     });
 
@@ -124,8 +122,6 @@ function setUI() {
     document.getElementById('randomRules').addEventListener("click", () => {
 
         stopAnimation();
-        generateRandomRules(getColorCount(), getStateCount());
-        updateRulesBox();
         resetSimulation();
 
     });
@@ -141,10 +137,20 @@ function setUI() {
         properties.showAnt = e.target.checked;
     });
 
-    document.getElementById('antColorPicker').addEventListener('change', function (e) {
-        const hex = e.target.value;
-        properties.antColor = hexToRGB(hex);
+    //any input that starts with antColor
+    document.querySelectorAll('input[id^="antColor"]').forEach(function (input) {
+        input.addEventListener('input', function (e) {
+            const rInput = document.getElementById('antColorR');
+            const gInput = document.getElementById('antColorG');
+            const bInput = document.getElementById('antColorB');
+            properties.antColor = {
+                r: parseInt(rInput.value),
+                g: parseInt(gInput.value),
+                b: parseInt(bInput.value)
+            };
+        });
     });
+
 
 
     document.querySelectorAll('input[name="controlsLocation"]').forEach(function (radio) {
@@ -168,36 +174,10 @@ function setUI() {
     document.getElementById('showControlsBtn').addEventListener('click', toggleControls);
 
 
-
     setupCustomScroll();
 }
 
-function hexToRGB(hex) {
-    const parsedHex = hex.startsWith('#') ? hex.slice(1) : hex;
-    const bigint = parseInt(parsedHex, 16);
-    return {
-        r: (bigint >> 16) & 255,
-        g: (bigint >> 8) & 255,
-        b: bigint & 255
-    };
-}
 
-function resizeTextarea(textarea) {
-    if (!textarea) return;
-    textarea.style.height = 'auto';
-    textarea.style.height = textarea.scrollHeight + 'px';
-}
-
-function updateRulesBox() {
-    let rules = exportCustomRulesToJSON();
-    console.log("Updated rules:", rules);
-    document.getElementById('customStates').value = rules;
-    console.log(document.getElementById('customStates').value);
-    const rulesText = document.getElementById('customStates');
-
-    resizeTextarea(rulesText); // Resize once on page load
-
-}
 
 function adjustRadioGrids() {
     const groups = document.querySelectorAll('.radio-group');
@@ -319,10 +299,29 @@ function setupCustomScroll() {
     const resizeObserver = new ResizeObserver(updateScrollButtons);
     resizeObserver.observe(controls);
 
+    setTimeout(updateScrollButtons, 500);
+
+
+    document.addEventListener('visibilitychange', function () {
+        isVisible = !document.hidden;
+        if (isVisible) {
+            // Reset timing when becoming visible to prevent catch-up
+            lastTimestamp = null;
+            simulationStartTime = null;
+            unpauseAnimation();
+
+        }
+        else {
+            // Pause animation when not visible
+            pauseAnimation();
+        }
+    });
+
+
+
 
 
     // Initial update
-    setTimeout(updateScrollButtons, 500);
 }
 
 
@@ -791,4 +790,9 @@ function updateAntsControls() {
             }
         });
     }
+}
+function updateAntsColor() {
+    document.getElementById('antColorR').value = properties.antColor.r;
+    document.getElementById('antColorG').value = properties.antColor.g;
+    document.getElementById('antColorB').value = properties.antColor.b;
 }

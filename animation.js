@@ -1,11 +1,11 @@
 // Animation control
 let animationId;
-let isPaused = false;
 let isRunning = false;
 
 // Animation control functions
 function startAnimation() {
-    if (!isPaused && !isRunning) {
+    document.getElementById('pauseResumeBtn').textContent = '⏸️';
+    if ( !isRunning) {
         isRunning = true;
         // Reset timestamp to avoid "catch up" spikes
         requestAnimationFrame(ts => {
@@ -16,6 +16,7 @@ function startAnimation() {
 }
 
 function stopAnimation() {
+    document.getElementById('pauseResumeBtn').textContent = '▶️';
     if (animationId && isRunning) {
         cancelAnimationFrame(animationId);
         animationId = null;
@@ -24,23 +25,13 @@ function stopAnimation() {
 }
 
 
-function pauseAnimation() {
-    isPaused = true;
-    stopAnimation();
-    document.getElementById('pauseResumeBtn').textContent = '▶️';
-}
-
-function unpauseAnimation() {
-    isPaused = false;
-    startAnimation();
-    document.getElementById('pauseResumeBtn').textContent = '⏸️';
-}
 
 let lastTimestamp = null;
 let simulationStartTime = null;
 
+
 function animate(timestamp) {
-    if (isPaused || !isRunning) return;  // stop if paused
+    if (!isRunning) return;  // stop if paused
 
     if (!lastTimestamp) {
         lastTimestamp = timestamp;
@@ -52,23 +43,35 @@ function animate(timestamp) {
     // Check if simulation duration exceeded
     if (timestamp - simulationStartTime > (properties.secondsPerIterationMode !== 'randomSeconds' ? getIterationDuration() : stepsPerSecond))// if fixed/infinite duration, get fixed duration, if random, random is set at cavas resize, once per run dont get random every frame
     {
-        generateRandomRules(6, 6);
-        updateRulesBox();
         resetSimulation();
         return;
     }
 
-    const elapsed = timestamp - lastTimestamp;
+    const elapsed = timestamp - lastTimestamp; //in ms
 
     const interval = 1000 / (properties.speedMode === 'fixedSpeed' ? getStepsPerSecond() : stepsPerSecond); // ms per step //if fixed speed get fixed speed, if random, random is set at cavas resize, once per run dont get random every frame
 
     if (elapsed >= interval) {
         const stepsToRun = Math.floor(elapsed / interval);
-        for (let i = 0; i < stepsToRun; i++) {
-            if (isPaused || !isRunning) return;
+
+
+         // CHANGED: Cap the maximum catch-up to 1 second worth of steps
+        const maxStepsPerSecond = (properties.speedMode === 'fixedSpeed' ? getStepsPerSecond() : stepsPerSecond);
+        const maxSteps = Math.min(stepsToRun, maxStepsPerSecond); // Cap to 1 second worth
+
+        for (let i = 0; i < maxSteps; i++) {
+            if (!isRunning) return;
             stepAnt();
         }
-        lastTimestamp = timestamp - (elapsed % interval);
+        
+        // CHANGED: If we hit the cap, reset timing to prevent further catch-up
+        if (stepsToRun > maxSteps) {
+            // We hit the cap, so reset timing to current time (skip excess frames)
+            lastTimestamp = timestamp;
+        } else {
+            // Normal timing adjustment
+            lastTimestamp = timestamp - (elapsed % interval);
+        }
     }
 
     animationId = requestAnimationFrame(animate);
@@ -79,7 +82,7 @@ function animate(timestamp) {
 function resetSimulation() {
     stopAnimation();
     simulationStartTime = null;
-    if (resizeCanvas()) {
+    if (setUpNewIteration()) {
         startAnimation();
     }
 }

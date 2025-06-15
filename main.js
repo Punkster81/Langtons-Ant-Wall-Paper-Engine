@@ -10,16 +10,8 @@ document.addEventListener('DOMContentLoaded', function() {
   setUI();
 
   // Initialize
-  if (resizeCanvas()) {
-    updateRulesBox();
+  if (setUpNewIteration()) {
     startAnimation();
   }
 });
 
-document.addEventListener('visibilitychange', () => {
-    if (document.hidden) {
-      pauseAnimation();
-    } else {
-        unpauseAnimation();
-    }
-  });

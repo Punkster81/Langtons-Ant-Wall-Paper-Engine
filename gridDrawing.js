@@ -2,7 +2,7 @@
 let cellSize = getCellSize();
 let stepsPerSecond = getStepsPerSecond();
 let secondsPerIteration = getIterationDuration();
-
+let numberOfAnts = getAntCount();
 
 
 // Grid and ant variables
@@ -12,11 +12,12 @@ let grid;
 ///////////////////////////////////////  
 
 // Resize and initialize grid and ant
-function resizeCanvas() {
+function setUpNewIteration() {
     try {
         cellSize = getCellSize();
         stepsPerSecond = getStepsPerSecond();
         secondsPerIteration = getIterationDuration();
+        numberOfAnts = getAntCount();
 
         let width = window.innerWidth;
         let height = window.innerHeight;

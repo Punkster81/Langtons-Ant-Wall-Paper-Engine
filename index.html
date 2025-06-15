@@ -103,14 +103,14 @@
         }
 
         .controls.bottom-left {
-            bottom: 1vh;
+            bottom: max(1vh, env(safe-area-inset-bottom, 40px));
             left: 1vw;
             top: auto;
             right: auto;
         }
 
         .controls.bottom-right {
-            bottom: 1vh;
+            bottom: max(1vh, env(safe-area-inset-bottom, 40px));
             right: 1vw;
             top: auto;
             left: auto;
@@ -159,63 +159,63 @@
             background: #f9f9f9;
         }
 
-.radio-group {
-    display: grid;
-    gap: 8px;
-    margin: 12px 0;
-    padding-left: 0;
-}
+        .radio-group {
+            display: grid;
+            gap: 8px;
+            margin: 12px 0;
+            padding-left: 0;
+        }
 
 
-.radio-group label {
-    display: flex;
-    align-items: center;
-    gap: 8px;
-    font-size: 0.95em;
-    cursor: pointer;
-    background-color: rgba(255, 255, 255, 0.05);
-    padding: 10px;
-    border-radius: 6px;
-    transition: background-color 0.2s ease, border 0.2s ease;
-    border: 1px solid transparent;
-}
+        .radio-group label {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.95em;
+            cursor: pointer;
+            background-color: rgba(255, 255, 255, 0.05);
+            padding: 10px;
+            border-radius: 6px;
+            transition: background-color 0.2s ease, border 0.2s ease;
+            border: 1px solid transparent;
+        }
 
-.radio-group label:hover {
-    background-color: rgba(255, 255, 255, 0.1);
-    border-color: rgba(255, 255, 255, 0.2);
-}
+        .radio-group label:hover {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-color: rgba(255, 255, 255, 0.2);
+        }
 
-.radio-group input[type="radio"] {
-    appearance: none;
-    width: 16px;
-    height: 16px;
-    border: 2px solid #ccc;
-    border-radius: 50%;
-    position: relative;
-    transition: border-color 0.2s;
-    background-color: transparent;
-}
+        .radio-group input[type="radio"] {
+            appearance: none;
+            width: 16px;
+            height: 16px;
+            border: 2px solid #ccc;
+            border-radius: 50%;
+            position: relative;
+            transition: border-color 0.2s;
+            background-color: transparent;
+        }
 
-.radio-group input[type="radio"]:checked {
-    border-color: #00c4ff;
-    background-color: #00c4ff;
-}
+        .radio-group input[type="radio"]:checked {
+            border-color: #00c4ff;
+            background-color: #00c4ff;
+        }
 
-.radio-group input[type="radio"]::after {
-    content: "";
-    position: absolute;
-    width: 6px;
-    height: 6px;
-    top: 4px;
-    left: 4px;
-    border-radius: 50%;
-    background: white;
-    display: none;
-}
+        .radio-group input[type="radio"]::after {
+            content: "";
+            position: absolute;
+            width: 6px;
+            height: 6px;
+            top: 4px;
+            left: 4px;
+            border-radius: 50%;
+            background: white;
+            display: none;
+        }
 
-.radio-group input[type="radio"]:checked::after {
-    display: block;
-}
+        .radio-group input[type="radio"]:checked::after {
+            display: block;
+        }
 
 
         .controls button {
@@ -275,14 +275,14 @@
         }
 
         .show-controls-btn.bottom-left {
-            bottom: 1vh;
+            bottom: max(1vh, env(safe-area-inset-bottom, 40px));
             left: 1vw;
             top: auto;
             right: auto;
         }
 
         .show-controls-btn.bottom-right {
-            bottom: 1vh;
+            bottom: max(1vh, env(safe-area-inset-bottom, 40px));
             right: 1vw;
             top: auto;
             left: auto;
@@ -398,11 +398,21 @@
                     </label>
 
                     <div id="antColorControl">
-                        <label>
-                            Ant(s) Color:
-                            <input type="color" id="antColorPicker" value="#ff0000">
-                        </label>
+                        <label>Ant(s) Color:</label>
+                        <div style="display: flex; gap: 8px; align-items: center; margin-top: 4px;">
+                            <label>
+                                R: <input type="number" id="antColorR" min="0" max="255" value="255"
+                                    style="width: 60px;">
+                            </label>
+                            <label>
+                                G: <input type="number" id="antColorG" min="0" max="255" value="0" style="width: 60px;">
+                            </label>
+                            <label>
+                                B: <input type="number" id="antColorB" min="0" max="255" value="0" style="width: 60px;">
+                            </label>
+                        </div>
                     </div>
+
                     <label>Ant(s) Mode:</label>
                     <div class="radio-group">
                         <label><input type="radio" name="antsMode" value="fixedAnts" checked> Fixed</label>
@@ -418,7 +428,8 @@
 
                 <!-- Rule Controls -->
                 <label for="customStates">Rules:</label>
-                <textarea id="customStates" style="width: 100%; font-size: 1.15vmin; overflow: hidden; resize: none;"></textarea>
+                <textarea hidden id="customStates"
+                    style="width: 100%; font-size: 1.15vmin; overflow: hidden; resize: none;"></textarea>
                 <button id="randomRules">Randomize Rules</button>
                 <!-- Import/Export -->
                 <button onclick="exportJSON()" title="Export Rules">📤</button>

@@ -2,13 +2,7 @@
 
 
 
-let rules = {
-    "0": [
-        { "writeColor": 1, "move": "R", "nextState": 0 },
-        { "writeColor": 0, "move": "L", "nextState": 0 }
-    ]
-};
-let colors = ["#000000", "#ffffff"];
+
 
 
 function exportCustomRulesToJSON() {
@@ -146,8 +140,8 @@ function generateRandomRules(numColors, numStates) {
         }
     }
 
-    colors = tempColors;
-    rules = tempRules
+    return { colors: tempColors, rules: tempRules };
+
 }
 
 
@@ -184,8 +178,7 @@ function importJSON(event) {
 
             // Optionally reinitialize
 
-            resizeCanvas();
-            updateRulesBox();
+            setUpNewIteration();
             const input = document.getElementById('jsonFileInput');
             input.value = ''; // Clear the previously selected file
         } catch (error) {

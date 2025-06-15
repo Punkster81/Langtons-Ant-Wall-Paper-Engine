@@ -31,17 +31,18 @@ const properties = {
     fixedNumberOfAnts: 1,
     minNumberOfAnts: 1,
     maxNumberOfAnts: 10,
+    differentRulesPerAnt: false,
 
-    // Seconds per Iteration (NEW)
+    // Seconds per Iteration
     secondsPerIterationMode: 'fixedSeconds',
     fixedSecondsPerIteration: 20,
     minSecondsPerIteration: 5,
     maxSecondsPerIteration: 60,
 
-    // Panel Location (NEW)
+    // Panel Location 
     panelLocation: 'topRight',
 
-    // Default Ant Command JSON (NEW)
+    // Default Ant Command JSON 
     defaultAntCommand: null
 };
 
@@ -104,8 +105,7 @@ function parseDefaultAntCommand() {
 
         // Optionally reinitialize
 
-        resizeCanvas();
-        updateRulesBox();
+        setUpNewIteration();
     } catch (error) {
         console.warn('Invalid JSON in defaultAntCommand, using fallback:', error);
     }

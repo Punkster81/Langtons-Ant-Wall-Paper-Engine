@@ -137,7 +137,12 @@ window.wallpaperPropertyListener = {
         //     properties.schemeColor = parseColor(userProperties.schemecolor.value);
         // }
         initializeWallPaperEngine();    
-    }
+    },
+
+
+
+
+    
 };
 
 function initializeWallPaperEngine() {
@@ -150,5 +155,6 @@ function initializeWallPaperEngine() {
     updateSecondsControls();
     updatePanelLocation();
     updateAntsControls();
+    updateAntsColor();
 
 }
