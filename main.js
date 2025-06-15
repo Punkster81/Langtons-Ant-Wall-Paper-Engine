@@ -6,6 +6,9 @@ const ctx = canvas.getContext('2d');
 // Event listeners
 document.addEventListener('DOMContentLoaded', function() {
 
+  initializeWallPaperEngine();
+  setUI();
+
   // Initialize
   if (resizeCanvas()) {
     updateRulesBox();

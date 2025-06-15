@@ -1,7 +1,7 @@
 ////////////////////////////////GLOBALS Configuration
-let cellSize = 6;
-let stepsPerSecond = 100;
-
+let cellSize = getCellSize();
+let stepsPerSecond = getStepsPerSecond();
+let secondsPerIteration = getIterationDuration();
 
 // Direction enum
 const Direction = {
@@ -27,6 +27,10 @@ let ant = {
 // Resize and initialize grid and ant
 function resizeCanvas() {
     try {
+        cellSize = getCellSize();
+        stepsPerSecond = getStepsPerSecond();
+        secondsPerIteration = getIterationDuration();
+
         let width = window.innerWidth;
         let height = window.innerHeight;
 
@@ -117,8 +121,8 @@ function stepAnt() {
             Math.floor(y * cellSize),
             Math.ceil(cellSize),
             Math.ceil(cellSize)
-          );
-          
+        );
+
 
         // Change direction
         const move = rule.move;
@@ -164,7 +168,9 @@ function stepAnt() {
         ant.x = (ant.x + cols) % cols;
         ant.y = (ant.y + rows) % rows;
 
-        drawAnt();
+        if (properties.showAnt) {
+            drawAnt();
+        }
 
         // Change to next state
         ant.state = rule.nextState || 0;
@@ -183,11 +189,11 @@ function drawAnt() {
 
     ctx.beginPath();
     ctx.arc(px, py, radius, 0, 2 * Math.PI);
-    ctx.fillStyle = 'red';
+    ctx.fillStyle = properties.antColor ? `rgb(${properties.antColor.r}, ${properties.antColor.g}, ${properties.antColor.b})` : '#FF0000';
     ctx.fill();
 }
-  
-  
+
+
 
 
 

@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Langton's Ant</title>
-    <style>
+        <style>
         body,
         html {
             margin: 0;
@@ -19,8 +19,6 @@
 
         .controls {
             position: absolute;
-            top: 1vh;
-            left: 1vw;
             color: white;
             background: rgba(0, 0, 0, 0.7);
             padding: 1.5vh 2vw;
@@ -29,6 +27,46 @@
             z-index: 100;
             max-width: 25vw;
             min-width: 20vw;
+            
+            /* Make it resizable */
+            resize: both;
+            overflow: auto;
+            
+            /* Set max dimensions to prevent it from taking over the screen */
+            max-height: 80vh;
+            min-height: 200px;
+            
+            /* Add a subtle border to make resize handle more visible */
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* Position overrides */
+        .controls.top-left {
+            top: 1vh;
+            left: 1vw;
+            right: auto;
+            bottom: auto;
+        }
+
+        .controls.top-right {
+            top: 1vh;
+            right: 1vw;
+            left: auto;
+            bottom: auto;
+        }
+
+        .controls.bottom-left {
+            bottom: 1vh;
+            left: 1vw;
+            top: auto;
+            right: auto;
+        }
+
+        .controls.bottom-right {
+            bottom: 1vh;
+            right: 1vw;
+            top: auto;
+            left: auto;
         }
 
         .controls label {
@@ -40,6 +78,28 @@
             width: 12vw;
             margin-left: 1vw;
             height: 0.6vh;
+            background: #ccc;
+            border-radius: 0.3vh;
+            -webkit-appearance: none;
+            appearance: none;
+        }
+
+        .controls input[type="range"]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            appearance: none;
+            width: 1.5vh;
+            height: 1.5vh;
+            background: #444;
+            border-radius: 50%;
+            cursor: pointer;
+        }
+
+        .controls input[type="range"]::-moz-range-thumb {
+            width: 1.5vh;
+            height: 1.5vh;
+            background: #444;
+            border-radius: 50%;
+            cursor: pointer;
         }
 
         .controls input[type="number"] {
@@ -47,6 +107,38 @@
             margin-left: 1vw;
             font-size: 1vmin;
             padding: 0.3vh;
+            border: 1px solid #aaa;
+            border-radius: 0.3vh;
+            background: #f9f9f9;
+        }
+
+        .controls select {
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+            background-color: #f9f9f9;
+            border: 1px solid #aaa;
+            border-radius: 0.3vh;
+            padding: 0.5vh 1vw;
+            font-size: 1.2vmin;
+            color: #333;
+            cursor: pointer;
+            width: auto;
+            min-width: 8vw;
+        }
+
+        .controls select {
+            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l5 6 5-6H0z' fill='%23666'/%3E%3C/svg%3E");
+            background-repeat: no-repeat;
+            background-position: right 0.7vw center;
+            background-size: 0.8vw auto;
+            padding-right: 2vw;
+        }
+
+        .controls select:focus {
+            outline: none;
+            border-color: #555;
+            background-color: #f0f0f0;
         }
 
         .controls button {
@@ -76,8 +168,6 @@
 
         .show-controls-btn {
             position: absolute;
-            top: 1vh;
-            left: 1vw;
             background: rgba(0, 0, 0, 0.8);
             color: white;
             border: none;
@@ -93,6 +183,34 @@
             transition: all 0.3s ease;
         }
 
+        .show-controls-btn.top-left {
+            top: 1vh;
+            left: 1vw;
+            right: auto;
+            bottom: auto;
+        }
+
+        .show-controls-btn.top-right {
+            top: 1vh;
+            right: 1vw;
+            left: auto;
+            bottom: auto;
+        }
+
+        .show-controls-btn.bottom-left {
+            bottom: 1vh;
+            left: 1vw;
+            top: auto;
+            right: auto;
+        }
+
+        .show-controls-btn.bottom-right {
+            bottom: 1vh;
+            right: 1vw;
+            top: auto;
+            left: auto;
+        }
+
         .show-controls-btn:hover {
             background: rgba(0, 0, 0, 0.9);
             transform: scale(1.1);
@@ -101,6 +219,48 @@
         .show-controls-btn.visible {
             display: flex;
         }
+
+        .section-divider {
+            margin: 20px 0;
+            border: none;
+            border-top: 2px solid #ccc;
+        }
+
+        /* Custom scrollbar styling for webkit browsers */
+        .controls::-webkit-scrollbar {
+            width: 8px;
+        }
+
+        .controls::-webkit-scrollbar-track {
+            background: rgba(255, 255, 255, 0.1);
+            border-radius: 4px;
+        }
+
+        .controls::-webkit-scrollbar-thumb {
+            background: rgba(255, 255, 255, 0.3);
+            border-radius: 4px;
+        }
+
+        .controls::-webkit-scrollbar-thumb:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        /* For Firefox */
+        .controls {
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
+        }
+
+        /* Add a resize indicator in the bottom right corner */
+        .controls::after {
+            content: "⋰";
+            position: absolute;
+            bottom: 2px;
+            right: 2px;
+            color: rgba(255, 255, 255, 0.4);
+            font-size: 12px;
+            pointer-events: none;
+        }
     </style>
 </head>
 
@@ -108,30 +268,115 @@
     <canvas id="canvas"></canvas>
 
 
-    <div class="controls" id="controls">
+    <div class="controls controls-hidden" id="controls">
 
         <!-- Basic Controls -->
-        <label>
-            Cell Size:
-            <input type="range" id="cellSize" min="1" value="6">
-            <span id="cellSizeValue">6</span>px
-        </label>
+        <div id="cellSize">
+            <label>
+                Cell Mode:
+                <select id="cellModeSelect">
+                    <option value="fixedCell">Fixed</option>
+                    <option value="randomCell">Random Range</option>
+                </select>
+            </label>
+            <div id="cellControls">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+        <hr class="section-divider">
 
-        <label>
-            Steps per Second:
-            <input type="range" id="stepsPerFrame" min="0" max="100" value="20">
-            <span id="stepsValue">100</span>
-        </label>
+        <div id="steps">
+            <label>
+                Speed Mode:
+                <select id="speedModeSelect">
+                    <option value="fixedSpeed">Fixed</option>
+                    <option value="randomSpeed">Random Range</option>
+                </select>
+            </label>
+            <div id="stepsControls">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+        <hr class="section-divider">
 
-        <label>
-            Number of Colors:
-            <input type="number" id="inputColors" min="2" value="2">
-        </label>
+        <div id="colors">
+            <label>
+                Color Mode:
+                <select id="colorModeSelect">
+                    <option value="fixedColor">Fixed</option>
+                    <option value="randomColor">Random Range</option>
+                </select>
+            </label>
 
-        <label>
-            Number of States:
-            <input type="number" id="inputStates" min="1" value="1">
-        </label>
+            <div id="colorControls">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+        <hr class="section-divider">
+
+        <div id="rules">
+            <label>
+                Rules Mode:
+                <select id="rulesModeSelect">
+                    <option value="fixedRules">Fixed</option>
+                    <option value="randomRules">Random Range</option>
+                </select>
+            </label>
+
+            <div id="rulesControls">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <div id="secondsPerIteration">
+            <label>
+                Seconds per Iteration Mode:
+                <select id="secondsModeSelect">
+                    <option value="fixedSeconds">Fixed</option>
+                    <option value="randomSeconds">Random Range</option>
+                    <option value="infinitySeconds">Infinity</option>
+                </select>
+            </label>
+
+            <div id="secondsControls">
+                <!-- Dynamic content will be inserted here -->
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+
+        <div id="antSettings">
+            <label>
+                Show Ant:
+                <input type="checkbox" id="showAntCheckbox" checked>
+            </label>
+
+            <div id="antColorControl">
+                <label>
+                    Ant Color:
+                    <input type="color" id="antColorPicker" value="#ff0000">
+                </label>
+            </div>
+        </div>
+
+        <hr class="section-divider">
+
+        <div id="panelPlacement">
+            <label>
+                Controls Panel Location:
+                <select id="controlsLocationSelect">
+                    <option value="topLeft">Top Left</option>
+                    <option value="topRight">Top Right</option>
+                    <option value="bottomLeft">Bottom Left</option>
+                    <option value="bottomRight">Bottom Right</option>
+                </select>
+            </label>
+        </div>
+
+        <hr class="section-divider">
 
         <!-- Rule Controls -->
         <label for="customStates">Rules: (JSON):</label>
@@ -139,16 +384,18 @@
             style="width: 100%; font-size: 1.15vmin; resize: vertical; overflow-x: auto;"></textarea>
         <button id="applyStatesBtn">Apply Rules</button>
         <button id="randomRules">Randomize Rules</button>
-
         <!-- Import/Export -->
-        <div style="margin-top: 8px;">
-            <button onclick="exportJSON()" title="Export Rules">📤</button>
-            <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="importJSON(event)">
-            <button onclick="document.getElementById('jsonFileInput').click()" title="Import Rules">📥</button>
-        </div>
+        <button onclick="exportJSON()" title="Export Rules">📤</button>
+        <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="importJSON(event)">
+        <button onclick="document.getElementById('jsonFileInput').click()" title="Import Rules">📥</button>
+
+        <hr class="section-divider">
+
+
+        <label for="simulationControls">Simulation Controls:</label>
 
         <!-- Simulation Controls -->
-        <div style="margin-top: 8px; display: flex; gap: 8px;">
+        <div id="simulationControls" style="margin-top: 8px; display: flex; gap: 8px;">
             <button id="pauseResumeBtn" title="Pause / Resume Simulation">⏸️</button>
             <button id="resetBtn" title="Reset Simulation">🔄</button>
             <button id="saveCanvas" title="Save Canvas Image">💾</button>
@@ -164,8 +411,10 @@
     </div>
 
 
-    <button class="show-controls-btn" id="showControlsBtn">⚙</button>
+    <button class="show-controls-btn visible" id="showControlsBtn">⚙</button>
 
+    <script src="propertiesHandler.js"></script>
+    <script src="wallpaper.js"></script>
     <script src="customRules.js"></script>
     <script src="main.js"></script>
     <script src="UIControl.js"></script>

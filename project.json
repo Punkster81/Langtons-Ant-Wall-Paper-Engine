@@ -1,0 +1,400 @@
+{
+	"file" : "index.html",
+	"general" : 
+	{
+		"properties" : 
+		{
+			"ant" : 
+			{
+				"index" : 20,
+				"order" : 120,
+				"text" : "Ant",
+				"type" : "group",
+				"value" : ""
+			},
+			"antcolor" : 
+			{
+				"condition" : "showant.value == true",
+				"index" : 22,
+				"order" : 122,
+				"text" : "Ant Color",
+				"type" : "color",
+				"value" : "1 0 0"
+			},
+			"cellmode" : 
+			{
+				"index" : 1,
+				"options" : 
+				[
+					{
+						"label" : "Fixed",
+						"value" : "fixedCell"
+					},
+					{
+						"label" : "Random Range",
+						"value" : "randomCell"
+					}
+				],
+				"order" : 101,
+				"text" : "Cell Mode",
+				"type" : "combo",
+				"value" : "randomCell"
+			},
+			"cellsize" : 
+			{
+				"condition" : "cellmode.value == \"fixedCell\"",
+				"fraction" : false,
+				"index" : 2,
+				"max" : 100,
+				"min" : 1,
+				"order" : 102,
+				"text" : "Fixed Cell Size",
+				"type" : "slider",
+				"value" : 6
+			},
+			"cellsizepx" : 
+			{
+				"index" : 0,
+				"order" : 100,
+				"text" : "Cell Size (px)",
+				"type" : "group",
+				"value" : ""
+			},
+			"colormode" : 
+			{
+				"index" : 11,
+				"options" : 
+				[
+					{
+						"label" : "Fixed",
+						"value" : "fixedColor"
+					},
+					{
+						"label" : "Random Range",
+						"value" : "randomColor"
+					}
+				],
+				"order" : 111,
+				"text" : "Color Mode",
+				"type" : "combo",
+				"value" : "fixedColor"
+			},
+			"fixedrules" : 
+			{
+				"condition" : "numberofrules.value == \"fixedRules\"",
+				"fraction" : false,
+				"index" : 17,
+				"max" : 1,
+				"min" : 1,
+				"order" : 117,
+				"text" : "Fixed Rules",
+				"type" : "slider",
+				"value" : 1
+			},
+			"fixedspeed" : 
+			{
+				"condition" : "speedmode.value == \"fixedSpeed\"",
+				"fraction" : false,
+				"index" : 7,
+				"max" : 200000,
+				"min" : 1,
+				"order" : 107,
+				"text" : "Fixed Speed",
+				"type" : "slider",
+				"value" : 50000
+			},
+			"fixedsecondsperiteration" : 
+			{
+				"condition" : "secondsperiterationmode.value == \"fixedSeconds\"",
+				"fraction" : false,
+				"index" : 25,
+				"max" : 3600,
+				"min" : 1,
+				"order" : 125,
+				"text" : "Fixed Seconds per Iteration",
+				"type" : "slider",
+				"value" : 20
+			},
+			"maxcellsize" : 
+			{
+				"condition" : "cellmode.value == \"randomCell\"",
+				"fraction" : false,
+				"index" : 4,
+				"max" : 100,
+				"min" : 1,
+				"order" : 104,
+				"text" : "Max Cell Size",
+				"type" : "slider",
+				"value" : 12
+			},
+			"maxcolor" : 
+			{
+				"condition" : "colormode.value == \"randomColor\"",
+				"fraction" : false,
+				"index" : 14,
+				"max" : 20,
+				"min" : 2,
+				"order" : 114,
+				"text" : "Max Colors",
+				"type" : "slider",
+				"value" : 5
+			},
+			"maxrules" : 
+			{
+				"condition" : "numberofrules.value == \"randomRules\"",
+				"fraction" : false,
+				"index" : 19,
+				"max" : 100,
+				"min" : 1,
+				"order" : 119,
+				"text" : "Max Rules",
+				"type" : "slider",
+				"value" : 5
+			},
+			"maxspeed" : 
+			{
+				"condition" : "speedmode.value == \"randomSpeed\"",
+				"fraction" : true,
+				"index" : 9,
+				"max" : 200000,
+				"min" : 1,
+				"order" : 109,
+				"precision" : 2,
+				"step" : 0.1,
+				"text" : "Max Speed",
+				"type" : "slider",
+				"value" : 100000
+			},
+			"maxsecondsperiteration" : 
+			{
+				"condition" : "secondsperiterationmode.value == \"randomSeconds\"",
+				"fraction" : false,
+				"index" : 27,
+				"max" : 3600,
+				"min" : 1,
+				"order" : 127,
+				"text" : "Max Seconds per Iteration",
+				"type" : "slider",
+				"value" : 60
+			},
+			"mincellsize" : 
+			{
+				"condition" : "cellmode.value == \"randomCell\"",
+				"fraction" : false,
+				"index" : 3,
+				"max" : 100,
+				"min" : 1,
+				"order" : 103,
+				"text" : "Min Cell Size",
+				"type" : "slider",
+				"value" : 1
+			},
+			"mincolors" : 
+			{
+				"condition" : "colormode.value == \"randomColor\"",
+				"fraction" : false,
+				"index" : 13,
+				"max" : 20,
+				"min" : 2,
+				"order" : 113,
+				"text" : "Min Colors",
+				"type" : "slider",
+				"value" : 2
+			},
+			"minrules" : 
+			{
+				"condition" : "numberofrules.value == \"randomRules\"",
+				"fraction" : false,
+				"index" : 18,
+				"max" : 1,
+				"min" : 1,
+				"order" : 118,
+				"text" : "Min Rules",
+				"type" : "slider",
+				"value" : 1
+			},
+			"minspeed" : 
+			{
+				"condition" : "speedmode.value == \"randomSpeed\"",
+				"fraction" : false,
+				"index" : 8,
+				"max" : 200000,
+				"min" : 1,
+				"order" : 108,
+				"text" : "Min Speed",
+				"type" : "slider",
+				"value" : 50000
+			},
+			"minsecondsperiteration" : 
+			{
+				"condition" : "secondsperiterationmode.value == \"randomSeconds\"",
+				"fraction" : false,
+				"index" : 26,
+				"max" : 3600,
+				"min" : 1,
+				"order" : 126,
+				"text" : "Min Seconds per Iteration",
+				"type" : "slider",
+				"value" : 5
+			},
+			"newproperty" : 
+			{
+				"condition" : "colormode.value == \"fixedColor\"",
+				"fraction" : false,
+				"index" : 12,
+				"max" : 20,
+				"min" : 2,
+				"order" : 112,
+				"text" : "Fixed Colors",
+				"type" : "slider",
+				"value" : 2
+			},
+			"numberofcolors" : 
+			{
+				"index" : 10,
+				"order" : 110,
+				"text" : "Number of Colors",
+				"type" : "group",
+				"value" : ""
+			},
+			"numberofrules" : 
+			{
+				"index" : 16,
+				"options" : 
+				[
+					{
+						"label" : "Fixed",
+						"value" : "fixedRules"
+					},
+					{
+						"label" : "Random Range",
+						"value" : "randomRules"
+					}
+				],
+				"order" : 116,
+				"text" : "Number of Rules",
+				"type" : "combo",
+				"value" : "fixedRules"
+			},
+			"panellocation" : 
+			{
+				"index" : 28,
+				"options" : 
+				[
+					{
+						"label" : "Top Left",
+						"value" : "topLeft"
+					},
+					{
+						"label" : "Top Right",
+						"value" : "topRight"
+					},
+					{
+						"label" : "Bottom Left",
+						"value" : "bottomLeft"
+					},
+					{
+						"label" : "Bottom Right",
+						"value" : "bottomRight"
+					}
+				],
+				"order" : 128,
+				"text" : "Settings Panel Location",
+				"type" : "combo",
+				"value" : "topRight"
+			},
+			"defaultantcommand" : 
+			{
+				"index" : 29,
+				"order" : 129,
+				"text" : "Default Ant Command JSON",
+				"type" : "textinput",
+				"value" : ""
+			},
+			"rules" : 
+			{
+				"index" : 15,
+				"order" : 115,
+				"text" : "Rules",
+				"type" : "group",
+				"value" : ""
+			},
+			"schemecolor" : 
+			{
+				"order" : 0,
+				"text" : "ui_browse_properties_scheme_color",
+				"type" : "color",
+				"value" : "0 0 0"
+			},
+			"showant" : 
+			{
+				"index" : 21,
+				"order" : 121,
+				"text" : "Show Ant",
+				"type" : "bool",
+				"value" : true
+			},
+			"speed" : 
+			{
+				"index" : 5,
+				"order" : 105,
+				"text" : "Speed (Steps per Second)",
+				"type" : "group",
+				"value" : ""
+			},
+			"speedmode" : 
+			{
+				"index" : 6,
+				"options" : 
+				[
+					{
+						"label" : "Fixed",
+						"value" : "fixedSpeed"
+					},
+					{
+						"label" : "Random Range",
+						"value" : "randomSpeed"
+					}
+				],
+				"order" : 106,
+				"text" : "Speed Mode",
+				"type" : "combo",
+				"value" : "randomSpeed"
+			},
+			"secondsperiteration" : 
+			{
+				"index" : 23,
+				"order" : 123,
+				"text" : "Seconds per Iteration",
+				"type" : "group",
+				"value" : ""
+			},
+			"secondsperiterationmode" : 
+			{
+				"index" : 24,
+				"options" : 
+				[
+					{
+						"label" : "Fixed",
+						"value" : "fixedSeconds"
+					},
+					{
+						"label" : "Random Range",
+						"value" : "randomSeconds"
+					},
+					{
+						"label" : "Infinity",
+						"value" : "infinitySeconds"
+					}
+				],
+				"order" : 124,
+				"text" : "Seconds per Iteration Mode",
+				"type" : "combo",
+				"value" : "fixedSeconds"
+			}
+		}
+	},
+	"title" : "Ants",
+	"type" : "web",
+	"version" : 0
+}
