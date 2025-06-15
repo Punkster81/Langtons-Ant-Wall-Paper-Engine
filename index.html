@@ -30,13 +30,61 @@
 
             /* Make it resizable */
             resize: both;
-            overflow: auto;
+            overflow: hidden;
+            /* custom scrollbar will handle overflow */
 
             max-height: 80vh;
             min-height: 200px;
 
             /* Add a subtle border to make resize handle more visible */
             border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        /* ADDED: Scroll buttons */
+        .scroll-button {
+            position: absolute;
+            width: 100%;
+            height: 5%;
+            background: rgba(255, 255, 255, 0.3);
+            border: none;
+            border-radius: 4px;
+            color: white;
+            font-size: 12px;
+            cursor: pointer;
+            z-index: 101;
+            display: none;
+            align-items: center;
+            justify-content: center;
+            transition: background-color 0.2s;
+        }
+
+        .scroll-button:hover {
+            background: rgba(255, 255, 255, 0.5);
+        }
+
+        .scroll-button.visible {
+            display: flex;
+        }
+
+        .scroll-up {
+            top: 5px;
+        }
+
+        .scroll-down {
+            bottom: 5px;
+        }
+
+        /* ADDED: Custom scroll controls container */
+        .controls-wrapper {
+            position: relative;
+            width: 100%;
+            height: 100%;
+        }
+
+        /* ADDED: Scrollable content container */
+        .controls-content {
+            height: 100%;
+            overflow: hidden;
         }
 
         /* Position overrides */
@@ -225,41 +273,7 @@
             border-top: 2px solid #ccc;
         }
 
-        /* Custom scrollbar styling for webkit browsers */
-        .controls::-webkit-scrollbar {
-            width: 8px;
-        }
-
-        .controls::-webkit-scrollbar-track {
-            background: rgba(255, 255, 255, 0.1);
-            border-radius: 4px;
-        }
-
-        .controls::-webkit-scrollbar-thumb {
-            background: rgba(255, 255, 255, 0.3);
-            border-radius: 4px;
-        }
-
-        .controls::-webkit-scrollbar-thumb:hover {
-            background: rgba(255, 255, 255, 0.5);
-        }
-
-        /* For Firefox */
-        .controls {
-            scrollbar-width: thin;
-            scrollbar-color: rgba(255, 255, 255, 0.3) rgba(255, 255, 255, 0.1);
-        }
-
-        /* Add a resize indicator in the bottom right corner */
-        .controls::after {
-            content: "⋰";
-            position: absolute;
-            bottom: 2px;
-            right: 2px;
-            color: rgba(255, 255, 255, 0.4);
-            font-size: 12px;
-            pointer-events: none;
-        }
+       
     </style>
 </head>
 
@@ -267,158 +281,162 @@
     <canvas id="canvas"></canvas>
 
 
-    <div class="controls controls-hidden" id="controls">
-        <div id="panelPlacement">
-            <label>
-                Controls Panel Location:
-                <select id="controlsLocationSelect">
-                    <option value="topLeft">Top Left</option>
-                    <option value="topRight">Top Right</option>
-                    <option value="bottomLeft">Bottom Left</option>
-                    <option value="bottomRight">Bottom Right</option>
-                </select>
-            </label>
-        </div>
+     <div class="controls controls-hidden" id="controls">
+        <!-- ADDED: Wrapper for custom scrollbar implementation -->
+        <div class="controls-wrapper" id ="controlsWrapper">
+            <div class="controls-content" id="controlsContent">
+                <div id="panelPlacement">
+                    <label>
+                        Controls Panel Location:
+                        <select id="controlsLocationSelect">
+                            <option value="topLeft">Top Left</option>
+                            <option value="topRight">Top Right</option>
+                            <option value="bottomLeft">Bottom Left</option>
+                            <option value="bottomRight">Bottom Right</option>
+                        </select>
+                    </label>
+                </div>
 
-        <hr class="section-divider">
-        <!-- Basic Controls -->
-        <div id="cellSize">
-            <label>
-                Cell Mode:
-                <select id="cellModeSelect">
-                    <option value="fixedCell">Fixed</option>
-                    <option value="randomCell">Random Range</option>
-                </select>
-            </label>
-            <div id="cellControls">
-                <!-- Dynamic content will be inserted here -->
+                <hr class="section-divider">
+                <!-- Basic Controls -->
+                <div id="cellSize">
+                    <label>
+                        Cell Mode:
+                        <select id="cellModeSelect">
+                            <option value="fixedCell">Fixed</option>
+                            <option value="randomCell">Random Range</option>
+                        </select>
+                    </label>
+                    <div id="cellControls">
+                        <!-- Dynamic content will be inserted here -->
+                    </div>
+                </div>
+                <hr class="section-divider">
+
+                <div id="steps">
+                    <label>
+                        Speed Mode:
+                        <select id="speedModeSelect">
+                            <option value="fixedSpeed">Fixed</option>
+                            <option value="randomSpeed">Random Range</option>
+                        </select>
+                    </label>
+                    <div id="stepsControls">
+                        <!-- Dynamic content will be inserted here -->
+                    </div>
+                </div>
+                <hr class="section-divider">
+
+                <div id="colors">
+                    <label>
+                        Color Mode:
+                        <select id="colorModeSelect">
+                            <option value="fixedColor">Fixed</option>
+                            <option value="randomColor">Random Range</option>
+                        </select>
+                    </label>
+
+                    <div id="colorControls">
+                        <!-- Dynamic content will be inserted here -->
+                    </div>
+                </div>
+                <hr class="section-divider">
+
+                <div id="rules">
+                    <label>
+                        Rules Mode:
+                        <select id="rulesModeSelect">
+                            <option value="fixedRules">Fixed</option>
+                            <option value="randomRules">Random Range</option>
+                        </select>
+                    </label>
+
+                    <div id="rulesControls">
+                        <!-- Dynamic content will be inserted here -->
+                    </div>
+                </div>
+
+                <hr class="section-divider">
+
+                <div id="secondsPerIteration">
+                    <label>
+                        Seconds per Iteration Mode:
+                        <select id="secondsModeSelect">
+                            <option value="fixedSeconds">Fixed</option>
+                            <option value="randomSeconds">Random Range</option>
+                            <option value="infinitySeconds">Infinity</option>
+                        </select>
+                    </label>
+
+                    <div id="secondsControls">
+                        <!-- Dynamic content will be inserted here -->
+                    </div>
+                </div>
+
+                <hr class="section-divider">
+
+                <div id="antSettings">
+                    <label>
+                        Show Ant(s):
+                        <input type="checkbox" id="showAntCheckbox" checked>
+                    </label>
+
+                    <div id="antColorControl">
+                        <label>
+                            Ant(s) Color:
+                            <input type="color" id="antColorPicker" value="#ff0000">
+                        </label>
+                    </div>
+                    <label>
+                        Ant(s) Mode:
+                        <select id="antsModeSelect">
+                            <option value="fixedAnts">Fixed</option>
+                            <option value="randomAnts">Random Range</option>
+                        </select>
+                    </label>
+                    <div id="antsControls">
+
+                    </div>
+
+                </div>
+
+                <hr class="section-divider">
+
+                <!-- Rule Controls -->
+                <label for="customStates">Rules:</label>
+                <textarea id="customStates" rows="6"
+                    style="width: 100%; font-size: 1.15vmin; resize: vertical; overflow-x: auto;"></textarea>
+                <button id="applyStatesBtn">Apply Rules</button>
+                <button id="randomRules">Randomize Rules</button>
+                <!-- Import/Export -->
+                <button onclick="exportJSON()" title="Export Rules">📤</button>
+                <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="importJSON(event)">
+                <button onclick="document.getElementById('jsonFileInput').click()" title="Import Rules">📥</button>
+
+                <hr class="section-divider">
+
+                <label for="simulationControls">Simulation Controls:</label>
+
+                <!-- Simulation Controls -->
+                <div id="simulationControls" style="margin-top: 8px; display: flex; gap: 8px;">
+                    <button id="pauseResumeBtn" title="Pause / Resume Simulation">⏸️</button>
+                    <button id="resetBtn" title="Reset Simulation">🔄</button>
+                    <button id="saveCanvas" title="Save Canvas Image">💾</button>
+                    <button id="toggleBtn" title="Hide Controls">➖</button>
+                </div>
+                <hr class="section-divider">
+                <label>Stats:</label>
+                <!-- Info & Errors -->
+                <div style="margin-top: 10px; ">
+                    Grid: <span id="gridInfo"></span>
+                </div>
+                <div id="errorMsg" class="error"></div>
             </div>
+            
+            <!-- ADDED: Scroll buttons -->
+            <button class="scroll-button scroll-up" id="scrollUpBtn" title="Scroll Up">▲</button>
+            <button class="scroll-button scroll-down" id="scrollDownBtn" title="Scroll Down">▼</button>
         </div>
-        <hr class="section-divider">
-
-        <div id="steps">
-            <label>
-                Speed Mode:
-                <select id="speedModeSelect">
-                    <option value="fixedSpeed">Fixed</option>
-                    <option value="randomSpeed">Random Range</option>
-                </select>
-            </label>
-            <div id="stepsControls">
-                <!-- Dynamic content will be inserted here -->
-            </div>
-        </div>
-        <hr class="section-divider">
-
-        <div id="colors">
-            <label>
-                Color Mode:
-                <select id="colorModeSelect">
-                    <option value="fixedColor">Fixed</option>
-                    <option value="randomColor">Random Range</option>
-                </select>
-            </label>
-
-            <div id="colorControls">
-                <!-- Dynamic content will be inserted here -->
-            </div>
-        </div>
-        <hr class="section-divider">
-
-        <div id="rules">
-            <label>
-                Rules Mode:
-                <select id="rulesModeSelect">
-                    <option value="fixedRules">Fixed</option>
-                    <option value="randomRules">Random Range</option>
-                </select>
-            </label>
-
-            <div id="rulesControls">
-                <!-- Dynamic content will be inserted here -->
-            </div>
-        </div>
-
-        <hr class="section-divider">
-
-        <div id="secondsPerIteration">
-            <label>
-                Seconds per Iteration Mode:
-                <select id="secondsModeSelect">
-                    <option value="fixedSeconds">Fixed</option>
-                    <option value="randomSeconds">Random Range</option>
-                    <option value="infinitySeconds">Infinity</option>
-                </select>
-            </label>
-
-            <div id="secondsControls">
-                <!-- Dynamic content will be inserted here -->
-            </div>
-        </div>
-
-        <hr class="section-divider">
-
-
-        <div id="antSettings">
-            <label>
-                Show Ant(s):
-                <input type="checkbox" id="showAntCheckbox" checked>
-            </label>
-
-            <div id="antColorControl">
-                <label>
-                    Ant(s) Color:
-                    <input type="color" id="antColorPicker" value="#ff0000">
-                </label>
-            </div>
-            <label>
-                Ant(s) Mode:
-                <select id="antsModeSelect">
-                    <option value="fixedAnts">Fixed</option>
-                    <option value="randomAnts">Random Range</option>
-                </select>
-            </label>
-            <div id="antsControls">
-
-            </div>
-
-        </div>
-
-        <hr class="section-divider">
-
-
-
-        <!-- Rule Controls -->
-        <label for="customStates">Rules:</label>
-        <textarea id="customStates" rows="6"
-            style="width: 100%; font-size: 1.15vmin; resize: vertical; overflow-x: auto;"></textarea>
-        <button id="applyStatesBtn">Apply Rules</button>
-        <button id="randomRules">Randomize Rules</button>
-        <!-- Import/Export -->
-        <button onclick="exportJSON()" title="Export Rules">📤</button>
-        <input type="file" id="jsonFileInput" accept=".json" style="display:none" onchange="importJSON(event)">
-        <button onclick="document.getElementById('jsonFileInput').click()" title="Import Rules">📥</button>
-
-        <hr class="section-divider">
-
-
-        <label for="simulationControls">Simulation Controls:</label>
-
-        <!-- Simulation Controls -->
-        <div id="simulationControls" style="margin-top: 8px; display: flex; gap: 8px;">
-            <button id="pauseResumeBtn" title="Pause / Resume Simulation">⏸️</button>
-            <button id="resetBtn" title="Reset Simulation">🔄</button>
-            <button id="saveCanvas" title="Save Canvas Image">💾</button>
-            <button id="toggleBtn" title="Hide Controls">➖</button>
-        </div>
-        <hr class="section-divider">
-        <label>Stats:</label>
-        <!-- Info & Errors -->
-        <div style="margin-top: 10px; ">
-            Grid: <span id="gridInfo"></span>
-        </div>
-        <div id="errorMsg" class="error"></div>
-
     </div>
 
 

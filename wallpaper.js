@@ -26,6 +26,7 @@ window.wallpaperPropertyListener = {
 
         if (userProperties.mincellsize !== undefined) {
             properties.minCellSize = userProperties.mincellsize.value;
+            
         }
 
         if (userProperties.maxcellsize !== undefined) {

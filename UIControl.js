@@ -149,7 +149,7 @@ function setUI() {
     document.getElementById('showControlsBtn').addEventListener('click', toggleControls);
     document.getElementById('applyStatesBtn').addEventListener('click', applyCustomRuleSet);
 
-
+    setupCustomScroll();
 }
 
 function hexToRGB(hex) {
@@ -169,7 +169,114 @@ function updateRulesBox() {
 
 
 
+function setupCustomScroll() {
+    const controlsWrapper = document.getElementById('controlsWrapper');
+    const controlsContent = document.getElementById('controlsContent');
+    const scrollUpBtn = document.getElementById('scrollUpBtn');
+    const scrollDownBtn = document.getElementById('scrollDownBtn');
 
+    function updateScrollButtons() {
+        controlsContent.offsetHeight; // This line forces the browser to recalculate
+
+
+        const maxHeight = window.innerHeight * 0.8; // 80vh
+        if (controlsContent.clientHeight > maxHeight) {
+            controlsContent.style.maxHeight = maxHeight + 'px';
+        }
+
+        const contentHeight = controlsContent.scrollHeight;
+        const containerHeight = controlsContent.clientHeight;
+        const scrollTop = controlsContent.scrollTop;
+        const maxScroll = contentHeight - containerHeight;
+
+        let notAtTop = scrollTop > 0;
+        let notAtBottom = scrollTop < maxScroll - 1 && maxScroll > 0
+
+        // Show/hide scroll up button
+        if (notAtTop) {
+            scrollUpBtn.classList.add('visible');
+        } else {
+            scrollUpBtn.classList.remove('visible');
+
+        }
+
+
+        // Show/hide scroll down button
+        if (notAtBottom) {
+            scrollDownBtn.classList.add('visible');
+        } else {
+            scrollDownBtn.classList.remove('visible');
+        }
+    }
+
+    let scrollInterval = null;
+
+    function startScrolling(direction) {
+        const step = 10; // smaller steps for smoother scrolling
+        scrollInterval = setInterval(() => {
+            if (direction === 'up') {
+                controlsContent.scrollTop = Math.max(0, controlsContent.scrollTop - step);
+            } else if (direction === 'down') {
+                const maxScroll = controlsContent.scrollHeight - controlsContent.clientHeight;
+                controlsContent.scrollTop = Math.min(maxScroll, controlsContent.scrollTop + step);
+            }
+            updateScrollButtons();
+        }, 16); // ~60fps
+    }
+
+    function stopScrolling() {
+        clearInterval(scrollInterval);
+        scrollInterval = null;
+    }
+
+    // Scroll Up Events
+    scrollUpBtn.addEventListener('mousedown', () => startScrolling('up'));
+    scrollUpBtn.addEventListener('mouseup', stopScrolling);
+    scrollUpBtn.addEventListener('mouseleave', stopScrolling);
+
+    // Scroll Down Events
+    scrollDownBtn.addEventListener('mousedown', () => startScrolling('down'));
+    scrollDownBtn.addEventListener('mouseup', stopScrolling);
+    scrollDownBtn.addEventListener('mouseleave', stopScrolling);
+
+
+    // Handle mouse wheel scrolling
+    controlsContent.addEventListener('wheel', function (e) {
+        e.preventDefault();
+        const delta = e.deltaY;
+        const currentScroll = controlsContent.scrollTop;
+        const maxScroll = controlsContent.scrollHeight - controlsContent.clientHeight;
+
+        let newScroll = currentScroll + delta;
+        newScroll = Math.max(0, Math.min(maxScroll, newScroll));
+
+        controlsContent.scrollTop = newScroll;
+        updateScrollButtons();
+    });
+
+    // Update buttons when content changes
+    const observer = new MutationObserver(updateScrollButtons);
+    observer.observe(controlsContent, {
+        childList: true,
+        subtree: true,
+        attributes: true
+    });
+
+    // Update buttons on resize
+    window.addEventListener('resize', updateScrollButtons);
+
+
+
+    // Update buttons when controls are resized
+    const controls = document.getElementById('controls');
+    const resizeObserver = new ResizeObserver(updateScrollButtons);
+    resizeObserver.observe(controls);
+
+
+
+    // Initial update
+    setTimeout(updateScrollButtons, 500);
+}
 
 
 // Function to update cell size controls
@@ -198,6 +305,11 @@ function updateCellSizeControls() {
 
     } else if (properties.cellMode === 'randomCell') {
         // Show min/max sliders for random cell size
+        if (properties.minCellSize > properties.maxCellSize) {
+            //make maxCellSize at least minCellSize +1
+            properties.maxCellSize = properties.minCellSize + 1;
+        }
+
         cellSizeDiv.innerHTML = `
             <label>
                 Min Cell Size:
@@ -270,6 +382,11 @@ function updateStepsControls() {
         });
 
     } else if (properties.speedMode === 'randomSpeed') {
+        if (properties.minSpeed > properties.maxSpeed) {
+            //make maxSpeed at least minSpeed +1
+            properties.maxSpeed = properties.minSpeed + 1;
+        }
+
         // Show min/max sliders for random speed
         stepsControlsDiv.innerHTML = `
             <label>
@@ -334,6 +451,10 @@ function updateColorControls() {
         });
 
     } else if (properties.colorMode === 'randomColor') {
+        if (properties.minColors > properties.maxColors) {
+            //make maxColors at least minColors +1
+            properties.maxColors = properties.minColors + 1;
+        }
         // Show min/max inputs for random colors
         colorControlsDiv.innerHTML = `
             <label>
@@ -391,6 +512,10 @@ function updateRulesControls() {
         });
 
     } else if (properties.numberOfRules === 'randomRules') {
+        if (properties.minRules > properties.maxRules) {
+            //make maxRules at least minRules +1
+            properties.maxRules = properties.minRules + 1;
+        }
         // Show min/max inputs for random rules
         rulesControlsDiv.innerHTML = `
             <label>
@@ -450,6 +575,10 @@ function updateSecondsControls() {
         });
 
     } else if (properties.secondsPerIterationMode === 'randomSeconds') {
+        if (properties.minSecondsPerIteration > properties.maxSecondsPerIteration) {
+            //make maxSecondsPerIteration at least minSecondsPerIteration +1
+            properties.maxSecondsPerIteration = properties.minSecondsPerIteration + 1;
+        }
         secondsControlsDiv.innerHTML = `
             <label>
                 Min Seconds per Iteration:
@@ -556,6 +685,10 @@ function updateAntsControls() {
         });
 
     } else if (properties.antsMode === 'randomAnts') {
+        if (properties.minNumberOfAnts > properties.maxNumberOfAnts) {
+            //make maxNumberOfAnts at least minNumberOfAnts +1
+            properties.maxNumberOfAnts = properties.minNumberOfAnts + 1;
+        }
         // Show min/max sliders for random ants count
         antsDiv.innerHTML = `
             <label>
