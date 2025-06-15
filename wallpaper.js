@@ -105,6 +105,10 @@ window.wallpaperPropertyListener = {
             properties.maxNumberOfAnts = userProperties.maxNumberOfAnts.value;
         }
 
+        if( userProperties.eachantdifferentrules !== undefined) {
+            properties.differentRulesPerAnt = userProperties.eachantdifferentrules.value;
+        }
+
         // Seconds per Iteration Properties
         if (userProperties.secondsperiterationmode !== undefined) {
             properties.secondsPerIterationMode = userProperties.secondsperiterationmode.value;

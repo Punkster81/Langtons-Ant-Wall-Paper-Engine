@@ -53,7 +53,7 @@ function applyCustomRuleSet() {
         }
 
         rules = parsed.rules;
-        resetSimulation();
+        newSimulation();
 
     } catch (err) {
         showError("JSON error: " + err.message);
@@ -146,10 +146,24 @@ function generateRandomRules(numColors, numStates) {
 
 
 function exportJSON() {
-    const data = {
-        rules,
-        colors,
-    };
+
+    let data = null;
+
+    if(getAntsArrayLength() === 0) {
+        showError("No ants to export.");
+        return;
+    }
+
+    if(!properties.differentRulesPerAnt || getAntsArrayLength() === 1) {
+        if(ants[0])
+        data = { rules: ants[0].rules, colors: ants[0].colors };
+    }
+    else {
+        data = [];
+        ants.forEach(ant => {
+            data.push({ rules: ant.rules, colors: ant.colors });
+        });
+    }
 
     const jsonStr = JSON.stringify(data, null, 2);
     const blob = new Blob([jsonStr], { type: "application/json" });
@@ -171,6 +185,14 @@ function importJSON(event) {
     reader.onload = function (e) {
         try {
             const data = JSON.parse(e.target.result);
+
+            if(Array.isArray(data)) {
+                // Handle array of ants
+                data.forEach(ant => {
+                    if (ant.rules) rules = ant.rules;
+                    if (ant.colors) colors = ant.colors;
+                });
+            }
 
             // Apply settings from imported JSON
             if (data.rules) rules = data.rules;

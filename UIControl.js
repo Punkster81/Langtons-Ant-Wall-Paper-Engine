@@ -121,8 +121,7 @@ function setUI() {
 
     document.getElementById('randomRules').addEventListener("click", () => {
 
-        stopAnimation();
-        resetSimulation();
+        newSimulation()
 
     });
 
@@ -135,6 +134,7 @@ function setUI() {
 
     document.getElementById('showAntCheckbox').addEventListener('change', function (e) {
         properties.showAnt = e.target.checked;
+        document.getElementById('antColorControl').style.display = properties.showAnt ? 'block' : 'none';  
     });
 
     //any input that starts with antColor
@@ -168,6 +168,9 @@ function setUI() {
         });
     });
 
+    document.getElementById('antRulesCheckbox').addEventListener('change', function (e) {
+        properties.differentRulesPerAnt = e.target.checked;
+    });
 
     document.getElementById('resetBtn').addEventListener('click', resetSimulation);
     document.getElementById('toggleBtn').addEventListener('click', toggleControls);
@@ -301,27 +304,6 @@ function setupCustomScroll() {
 
     setTimeout(updateScrollButtons, 500);
 
-
-    document.addEventListener('visibilitychange', function () {
-        isVisible = !document.hidden;
-        if (isVisible) {
-            // Reset timing when becoming visible to prevent catch-up
-            lastTimestamp = null;
-            simulationStartTime = null;
-            unpauseAnimation();
-
-        }
-        else {
-            // Pause animation when not visible
-            pauseAnimation();
-        }
-    });
-
-
-
-
-
-    // Initial update
 }
 
 

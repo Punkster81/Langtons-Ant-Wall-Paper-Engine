@@ -15,8 +15,8 @@
 			"antcolor" : 
 			{
 				"condition" : "showant.value == true",
-				"index" : 26,
-				"order" : 126,
+				"index" : 27,
+				"order" : 127,
 				"text" : "Ant(s) Color",
 				"type" : "color",
 				"value" : "1 0 0"
@@ -100,11 +100,31 @@
 			},
 			"defaultantcommand" : 
 			{
-				"index" : 33,
-				"order" : 133,
+				"index" : 34,
+				"order" : 134,
 				"text" : "Default Ant Command JSON",
 				"type" : "textinput",
 				"value" : ""
+			},
+			"eachantshasitsownrules" : 
+			{
+				"index" : 25,
+				"order" : 125,
+				"text" : "Each Ants Has Its Own Rules",
+				"type" : "bool",
+				"value" : false
+			},
+			"fixedNumberOfAnts" : 
+			{
+				"condition" : "antsmode.value == \"fixedAnts\"",
+				"fraction" : false,
+				"index" : 22,
+				"max" : 100,
+				"min" : 1,
+				"order" : 122,
+				"text" : "Number of Ants",
+				"type" : "slider",
+				"value" : 1
 			},
 			"fixedrules" : 
 			{
@@ -122,10 +142,10 @@
 			{
 				"condition" : "secondsperiterationmode.value == \"fixedSeconds\"",
 				"fraction" : false,
-				"index" : 29,
+				"index" : 30,
 				"max" : 3600,
 				"min" : 1,
-				"order" : 129,
+				"order" : 130,
 				"text" : "Fixed Seconds per Iteration",
 				"type" : "slider",
 				"value" : 20
@@ -194,10 +214,10 @@
 			{
 				"condition" : "secondsperiterationmode.value == \"randomSeconds\"",
 				"fraction" : false,
-				"index" : 31,
+				"index" : 32,
 				"max" : 3600,
 				"min" : 1,
-				"order" : 131,
+				"order" : 132,
 				"text" : "Max Seconds per Iteration",
 				"type" : "slider",
 				"value" : 60
@@ -267,10 +287,10 @@
 			{
 				"condition" : "secondsperiterationmode.value == \"randomSeconds\"",
 				"fraction" : false,
-				"index" : 30,
+				"index" : 31,
 				"max" : 3600,
 				"min" : 1,
-				"order" : 130,
+				"order" : 131,
 				"text" : "Min Seconds per Iteration",
 				"type" : "slider",
 				"value" : 5
@@ -298,18 +318,6 @@
 				"text" : "Fixed Colors",
 				"type" : "slider",
 				"value" : 2
-			},
-			"fixedNumberOfAnts" : 
-			{
-				"condition" : "antsmode.value == \"fixedAnts\"",
-				"fraction" : false,
-				"index" : 22,
-				"max" : 100,
-				"min" : 1,
-				"order" : 122,
-				"text" : "Number of Ants",
-				"type" : "slider",
-				"value" : 1
 			},
 			"numberofcolors" : 
 			{
@@ -340,7 +348,7 @@
 			},
 			"panellocation" : 
 			{
-				"index" : 32,
+				"index" : 33,
 				"options" : 
 				[
 					{
@@ -360,7 +368,7 @@
 						"value" : "bottomRight"
 					}
 				],
-				"order" : 132,
+				"order" : 133,
 				"text" : "Settings Panel Location",
 				"type" : "combo",
 				"value" : "topRight"
@@ -382,15 +390,15 @@
 			},
 			"secondsperiteration" : 
 			{
-				"index" : 27,
-				"order" : 127,
+				"index" : 28,
+				"order" : 128,
 				"text" : "Seconds per Iteration",
 				"type" : "group",
 				"value" : ""
 			},
 			"secondsperiterationmode" : 
 			{
-				"index" : 28,
+				"index" : 29,
 				"options" : 
 				[
 					{
@@ -406,15 +414,15 @@
 						"value" : "infinitySeconds"
 					}
 				],
-				"order" : 128,
+				"order" : 129,
 				"text" : "Seconds per Iteration Mode",
 				"type" : "combo",
 				"value" : "fixedSeconds"
 			},
 			"showant" : 
 			{
-				"index" : 25,
-				"order" : 125,
+				"index" : 26,
+				"order" : 126,
 				"text" : "Show Ant(s)",
 				"type" : "bool",
 				"value" : true

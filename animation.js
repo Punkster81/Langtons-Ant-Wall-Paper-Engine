@@ -43,7 +43,7 @@ function animate(timestamp) {
     // Check if simulation duration exceeded
     if (timestamp - simulationStartTime > (properties.secondsPerIterationMode !== 'randomSeconds' ? getIterationDuration() : stepsPerSecond))// if fixed/infinite duration, get fixed duration, if random, random is set at cavas resize, once per run dont get random every frame
     {
-        resetSimulation();
+        newSimulation();
         return;
     }
 
@@ -59,11 +59,9 @@ function animate(timestamp) {
         const maxStepsPerSecond = (properties.speedMode === 'fixedSpeed' ? getStepsPerSecond() : stepsPerSecond);
         const maxSteps = Math.min(stepsToRun, maxStepsPerSecond); // Cap to 1 second worth
 
-        for (let i = 0; i < maxSteps; i++) {
-            if (!isRunning) return;
-            stepAnt();
+        for (let i = 0; i < maxSteps && isRunning; i++) {
+            ants.forEach(ant => ant && ant.step());
         }
-        
         // CHANGED: If we hit the cap, reset timing to prevent further catch-up
         if (stepsToRun > maxSteps) {
             // We hit the cap, so reset timing to current time (skip excess frames)
@@ -80,6 +78,16 @@ function animate(timestamp) {
 
 
 function resetSimulation() {
+    let currentlyRunning = isRunning; // Store current running state
+    stopAnimation();
+    simulationStartTime = null;
+    if (resetIteration() && currentlyRunning) {
+        startAnimation();
+    }
+}
+
+
+function newSimulation() {
     stopAnimation();
     simulationStartTime = null;
     if (setUpNewIteration()) {
