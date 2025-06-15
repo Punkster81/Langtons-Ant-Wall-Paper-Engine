@@ -4,7 +4,7 @@
 <head>
     <meta charset="UTF-8" />
     <title>Langton's Ant</title>
-        <style>
+    <style>
         body,
         html {
             margin: 0;
@@ -27,15 +27,14 @@
             z-index: 100;
             max-width: 25vw;
             min-width: 20vw;
-            
+
             /* Make it resizable */
             resize: both;
             overflow: auto;
-            
-            /* Set max dimensions to prevent it from taking over the screen */
+
             max-height: 80vh;
             min-height: 200px;
-            
+
             /* Add a subtle border to make resize handle more visible */
             border: 1px solid rgba(255, 255, 255, 0.2);
         }
@@ -269,7 +268,19 @@
 
 
     <div class="controls controls-hidden" id="controls">
+        <div id="panelPlacement">
+            <label>
+                Controls Panel Location:
+                <select id="controlsLocationSelect">
+                    <option value="topLeft">Top Left</option>
+                    <option value="topRight">Top Right</option>
+                    <option value="bottomLeft">Bottom Left</option>
+                    <option value="bottomRight">Bottom Right</option>
+                </select>
+            </label>
+        </div>
 
+        <hr class="section-divider">
         <!-- Basic Controls -->
         <div id="cellSize">
             <label>
@@ -350,36 +361,35 @@
 
         <div id="antSettings">
             <label>
-                Show Ant:
+                Show Ant(s):
                 <input type="checkbox" id="showAntCheckbox" checked>
             </label>
 
             <div id="antColorControl">
                 <label>
-                    Ant Color:
+                    Ant(s) Color:
                     <input type="color" id="antColorPicker" value="#ff0000">
                 </label>
             </div>
-        </div>
-
-        <hr class="section-divider">
-
-        <div id="panelPlacement">
             <label>
-                Controls Panel Location:
-                <select id="controlsLocationSelect">
-                    <option value="topLeft">Top Left</option>
-                    <option value="topRight">Top Right</option>
-                    <option value="bottomLeft">Bottom Left</option>
-                    <option value="bottomRight">Bottom Right</option>
+                Ant(s) Mode:
+                <select id="antsModeSelect">
+                    <option value="fixedAnts">Fixed</option>
+                    <option value="randomAnts">Random Range</option>
                 </select>
             </label>
+            <div id="antsControls">
+
+            </div>
+
         </div>
 
         <hr class="section-divider">
 
+
+
         <!-- Rule Controls -->
-        <label for="customStates">Rules: (JSON):</label>
+        <label for="customStates">Rules:</label>
         <textarea id="customStates" rows="6"
             style="width: 100%; font-size: 1.15vmin; resize: vertical; overflow-x: auto;"></textarea>
         <button id="applyStatesBtn">Apply Rules</button>
@@ -401,9 +411,10 @@
             <button id="saveCanvas" title="Save Canvas Image">💾</button>
             <button id="toggleBtn" title="Hide Controls">➖</button>
         </div>
-
+        <hr class="section-divider">
+        <label>Stats:</label>
         <!-- Info & Errors -->
-        <div style="margin-top: 10px; opacity: 0.7;">
+        <div style="margin-top: 10px; ">
             Grid: <span id="gridInfo"></span>
         </div>
         <div id="errorMsg" class="error"></div>
@@ -413,6 +424,7 @@
 
     <button class="show-controls-btn visible" id="showControlsBtn">⚙</button>
 
+    <script src="ants.js"></script>
     <script src="propertiesHandler.js"></script>
     <script src="wallpaper.js"></script>
     <script src="customRules.js"></script>

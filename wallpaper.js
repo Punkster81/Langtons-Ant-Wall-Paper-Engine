@@ -21,6 +21,7 @@ window.wallpaperPropertyListener = {
 
         if (userProperties.cellsize !== undefined) {
             properties.cellSize = userProperties.cellsize.value;
+            resetSimulation();
         }
 
         if (userProperties.mincellsize !== undefined) {
@@ -82,13 +83,25 @@ window.wallpaperPropertyListener = {
             properties.maxRules = userProperties.maxrules.value;
         }
 
-        // Ant Properties
+        // Ant(s) Properties
         if (userProperties.showant !== undefined) {
             properties.showAnt = userProperties.showant.value;
         }
 
         if (userProperties.antcolor !== undefined) {
             properties.antColor = parseColor(userProperties.antcolor.value);
+        }
+        
+        if (userProperties.fixedNumberOfAnts !== undefined) {
+            properties.fixedNumberOfAnts = userProperties.fixedNumberOfAnts.value;
+        }
+
+        if (userProperties.minNumberOfAnts !== undefined) {
+            properties.minNumberOfAnts = userProperties.minNumberOfAnts.value;
+        }
+
+        if (userProperties.maxNumberOfAnts !== undefined) {
+            properties.maxNumberOfAnts = userProperties.maxNumberOfAnts.value;
         }
 
         // Seconds per Iteration Properties
@@ -122,7 +135,7 @@ window.wallpaperPropertyListener = {
         // if (userProperties.schemecolor !== undefined) {
         //     properties.schemeColor = parseColor(userProperties.schemecolor.value);
         // }
-
+        initializeWallPaperEngine();    
     }
 };
 
@@ -130,9 +143,11 @@ function initializeWallPaperEngine() {
     parseDefaultAntCommand();
     updateCellSizeControls();
     updateStepsControls();
-    applyPanelLocation();
+    updatePanelLocation();
     updateRulesControls();
     updateColorControls();
     updateSecondsControls();
-    applyPanelLocation();
+    updatePanelLocation();
+    updateAntsControls();
+
 }

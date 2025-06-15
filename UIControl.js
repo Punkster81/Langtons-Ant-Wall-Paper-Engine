@@ -135,7 +135,12 @@ function setUI() {
 
     document.getElementById('controlsLocationSelect').addEventListener('change', function (e) {
         properties.panelLocation = e.target.value;
-        applyPanelLocation();
+        updatePanelLocation();
+    });
+
+    document.getElementById('antsModeSelect').addEventListener('change', function (e) {
+        properties.antsMode = e.target.value;
+        updateAntsControls();
     });
 
 
@@ -143,7 +148,6 @@ function setUI() {
     document.getElementById('toggleBtn').addEventListener('click', toggleControls);
     document.getElementById('showControlsBtn').addEventListener('click', toggleControls);
     document.getElementById('applyStatesBtn').addEventListener('click', applyCustomRuleSet);
-
 
 
 }
@@ -237,7 +241,6 @@ function updateCellSizeControls() {
         });
     }
 }
-
 
 
 
@@ -494,20 +497,21 @@ function updateSecondsControls() {
 
 
 
-function applyPanelLocation() {
+function updatePanelLocation() {
     const panel = document.querySelector('.controls'); // Changed to target .controls
     const showPanelBtn = document.querySelector('.show-controls-btn');
-    
+
     let LocationSelect = document.getElementById('controlsLocationSelect');
-    console.log(LocationSelect);
     LocationSelect.value = properties.panelLocation;
 
     if (!panel) return;
     if (!showPanelBtn) return;
-    
+
     // Reset all position classes
     panel.classList.remove('top-left', 'top-right', 'bottom-left', 'bottom-right');
-    
+    showPanelBtn.classList.remove('top-left', 'top-right', 'bottom-left', 'bottom-right');
+
+
     // Apply the selected position
     switch (properties.panelLocation) {
         case 'topLeft':
@@ -526,5 +530,73 @@ function applyPanelLocation() {
             showPanelBtn.classList.add('bottom-right');
             panel.classList.add('bottom-right');
             break;
+    }
+}
+
+
+function updateAntsControls() {
+    const antsDiv = document.getElementById('antsControls');
+
+    if (properties.antsMode === 'fixedAnts') {
+        // Show single slider for fixed number of ants
+        antsDiv.innerHTML = `
+            <label>
+                Number of Ants:
+                <input type="range" id="antsSlider" min="1" value="${properties.fixedNumberOfAnts}" max="100">
+                <span id="antsValue">${properties.fixedNumberOfAnts}</span>
+            </label>
+        `;
+
+        // Event listener for fixed ants count
+        document.getElementById('antsSlider').addEventListener('input', function (e) {
+            properties.fixedNumberOfAnts = parseInt(e.target.value);
+            document.getElementById('antsValue').textContent = properties.fixedNumberOfAnts;
+            // Apply the ants count change to your simulation
+            NumberOfAnts = getAntCount();
+        });
+
+    } else if (properties.antsMode === 'randomAnts') {
+        // Show min/max sliders for random ants count
+        antsDiv.innerHTML = `
+            <label>
+                Min Ants:
+                <input type="range" id="minAntsSlider" min="1" value="${properties.minNumberOfAnts}" max="100">
+                <span id="minAntsValue">${properties.minNumberOfAnts}</span>
+            </label>
+            <label>
+                Max Ants:
+                <input type="range" id="maxAntsSlider" min="1" value="${properties.maxNumberOfAnts}" max="100">
+                <span id="maxAntsValue">${properties.maxNumberOfAnts}</span>
+            </label>
+        `;
+
+        // Event listeners for min/max ants count
+        document.getElementById('minAntsSlider').addEventListener('input', function (e) {
+            properties.minNumberOfAnts = parseInt(e.target.value);
+            document.getElementById('minAntsValue').textContent = properties.minNumberOfAnts;
+
+            // Ensure min doesn't exceed max
+            if (properties.minNumberOfAnts > properties.maxNumberOfAnts) {
+                properties.maxNumberOfAnts = properties.minNumberOfAnts;
+                document.getElementById('maxAntsSlider').value = properties.maxNumberOfAnts;
+                document.getElementById('maxAntsValue').textContent = properties.maxNumberOfAnts;
+                NumberOfAnts = getAntCount();
+
+            }
+        });
+
+        document.getElementById('maxAntsSlider').addEventListener('input', function (e) {
+            properties.maxNumberOfAnts = parseInt(e.target.value);
+            document.getElementById('maxAntsValue').textContent = properties.maxNumberOfAnts;
+
+            // Ensure max doesn't go below min
+            if (properties.maxNumberOfAnts < properties.minNumberOfAnts) {
+                properties.minNumberOfAnts = properties.maxNumberOfAnts;
+                document.getElementById('minAntsSlider').value = properties.minNumberOfAnts;
+                document.getElementById('minAntsValue').textContent = properties.minNumberOfAnts;
+                NumberOfAnts = getAntCount();
+
+            }
+        });
     }
 }

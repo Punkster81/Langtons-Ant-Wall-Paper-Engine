@@ -8,18 +8,37 @@
 			{
 				"index" : 20,
 				"order" : 120,
-				"text" : "Ant",
+				"text" : "Ant(s)",
 				"type" : "group",
 				"value" : ""
 			},
 			"antcolor" : 
 			{
 				"condition" : "showant.value == true",
-				"index" : 22,
-				"order" : 122,
-				"text" : "Ant Color",
+				"index" : 26,
+				"order" : 126,
+				"text" : "Ant(s) Color",
 				"type" : "color",
 				"value" : "1 0 0"
+			},
+			"antsmode" : 
+			{
+				"index" : 21,
+				"options" : 
+				[
+					{
+						"label" : "Fixed",
+						"value" : "fixedAnts"
+					},
+					{
+						"label" : "Random Range",
+						"value" : "randomAnts"
+					}
+				],
+				"order" : 121,
+				"text" : "Ant(s) Mode",
+				"type" : "combo",
+				"value" : "fixedAnts"
 			},
 			"cellmode" : 
 			{
@@ -79,6 +98,14 @@
 				"type" : "combo",
 				"value" : "fixedColor"
 			},
+			"defaultantcommand" : 
+			{
+				"index" : 33,
+				"order" : 133,
+				"text" : "Default Ant Command JSON",
+				"type" : "textinput",
+				"value" : ""
+			},
 			"fixedrules" : 
 			{
 				"condition" : "numberofrules.value == \"fixedRules\"",
@@ -90,6 +117,18 @@
 				"text" : "Fixed Rules",
 				"type" : "slider",
 				"value" : 1
+			},
+			"fixedsecondsperiteration" : 
+			{
+				"condition" : "secondsperiterationmode.value == \"fixedSeconds\"",
+				"fraction" : false,
+				"index" : 29,
+				"max" : 3600,
+				"min" : 1,
+				"order" : 129,
+				"text" : "Fixed Seconds per Iteration",
+				"type" : "slider",
+				"value" : 20
 			},
 			"fixedspeed" : 
 			{
@@ -103,17 +142,17 @@
 				"type" : "slider",
 				"value" : 50000
 			},
-			"fixedsecondsperiteration" : 
+			"maxants" : 
 			{
-				"condition" : "secondsperiterationmode.value == \"fixedSeconds\"",
+				"condition" : "antsmode.value == \"randomAnts\"",
 				"fraction" : false,
-				"index" : 25,
-				"max" : 3600,
+				"index" : 24,
+				"max" : 100,
 				"min" : 1,
-				"order" : 125,
-				"text" : "Fixed Seconds per Iteration",
+				"order" : 124,
+				"text" : "Max Ant(s)",
 				"type" : "slider",
-				"value" : 20
+				"value" : 10
 			},
 			"maxcellsize" : 
 			{
@@ -151,6 +190,18 @@
 				"type" : "slider",
 				"value" : 5
 			},
+			"maxsecondsperiteration" : 
+			{
+				"condition" : "secondsperiterationmode.value == \"randomSeconds\"",
+				"fraction" : false,
+				"index" : 31,
+				"max" : 3600,
+				"min" : 1,
+				"order" : 131,
+				"text" : "Max Seconds per Iteration",
+				"type" : "slider",
+				"value" : 60
+			},
 			"maxspeed" : 
 			{
 				"condition" : "speedmode.value == \"randomSpeed\"",
@@ -160,22 +211,21 @@
 				"min" : 1,
 				"order" : 109,
 				"precision" : 2,
-				"step" : 0.1,
 				"text" : "Max Speed",
 				"type" : "slider",
 				"value" : 100000
 			},
-			"maxsecondsperiteration" : 
+			"minantss" : 
 			{
-				"condition" : "secondsperiterationmode.value == \"randomSeconds\"",
+				"condition" : "antsmode.value==\"randomAnts\"",
 				"fraction" : false,
-				"index" : 27,
-				"max" : 3600,
+				"index" : 23,
+				"max" : 100,
 				"min" : 1,
-				"order" : 127,
-				"text" : "Max Seconds per Iteration",
+				"order" : 123,
+				"text" : "Min Ants(s)",
 				"type" : "slider",
-				"value" : 60
+				"value" : 1
 			},
 			"mincellsize" : 
 			{
@@ -213,6 +263,18 @@
 				"type" : "slider",
 				"value" : 1
 			},
+			"minsecondsperiteration" : 
+			{
+				"condition" : "secondsperiterationmode.value == \"randomSeconds\"",
+				"fraction" : false,
+				"index" : 30,
+				"max" : 3600,
+				"min" : 1,
+				"order" : 130,
+				"text" : "Min Seconds per Iteration",
+				"type" : "slider",
+				"value" : 5
+			},
 			"minspeed" : 
 			{
 				"condition" : "speedmode.value == \"randomSpeed\"",
@@ -225,18 +287,6 @@
 				"type" : "slider",
 				"value" : 50000
 			},
-			"minsecondsperiteration" : 
-			{
-				"condition" : "secondsperiterationmode.value == \"randomSeconds\"",
-				"fraction" : false,
-				"index" : 26,
-				"max" : 3600,
-				"min" : 1,
-				"order" : 126,
-				"text" : "Min Seconds per Iteration",
-				"type" : "slider",
-				"value" : 5
-			},
 			"newproperty" : 
 			{
 				"condition" : "colormode.value == \"fixedColor\"",
@@ -248,6 +298,18 @@
 				"text" : "Fixed Colors",
 				"type" : "slider",
 				"value" : 2
+			},
+			"fixedNumberOfAnts" : 
+			{
+				"condition" : "antsmode.value == \"fixedAnts\"",
+				"fraction" : false,
+				"index" : 22,
+				"max" : 100,
+				"min" : 1,
+				"order" : 122,
+				"text" : "Number of Ants",
+				"type" : "slider",
+				"value" : 1
 			},
 			"numberofcolors" : 
 			{
@@ -278,7 +340,7 @@
 			},
 			"panellocation" : 
 			{
-				"index" : 28,
+				"index" : 32,
 				"options" : 
 				[
 					{
@@ -298,18 +360,10 @@
 						"value" : "bottomRight"
 					}
 				],
-				"order" : 128,
+				"order" : 132,
 				"text" : "Settings Panel Location",
 				"type" : "combo",
 				"value" : "topRight"
-			},
-			"defaultantcommand" : 
-			{
-				"index" : 29,
-				"order" : 129,
-				"text" : "Default Ant Command JSON",
-				"type" : "textinput",
-				"value" : ""
 			},
 			"rules" : 
 			{
@@ -326,11 +380,42 @@
 				"type" : "color",
 				"value" : "0 0 0"
 			},
+			"secondsperiteration" : 
+			{
+				"index" : 27,
+				"order" : 127,
+				"text" : "Seconds per Iteration",
+				"type" : "group",
+				"value" : ""
+			},
+			"secondsperiterationmode" : 
+			{
+				"index" : 28,
+				"options" : 
+				[
+					{
+						"label" : "Fixed",
+						"value" : "fixedSeconds"
+					},
+					{
+						"label" : "Random Range",
+						"value" : "randomSeconds"
+					},
+					{
+						"label" : "Infinity",
+						"value" : "infinitySeconds"
+					}
+				],
+				"order" : 128,
+				"text" : "Seconds per Iteration Mode",
+				"type" : "combo",
+				"value" : "fixedSeconds"
+			},
 			"showant" : 
 			{
-				"index" : 21,
-				"order" : 121,
-				"text" : "Show Ant",
+				"index" : 25,
+				"order" : 125,
+				"text" : "Show Ant(s)",
 				"type" : "bool",
 				"value" : true
 			},
@@ -360,37 +445,6 @@
 				"text" : "Speed Mode",
 				"type" : "combo",
 				"value" : "randomSpeed"
-			},
-			"secondsperiteration" : 
-			{
-				"index" : 23,
-				"order" : 123,
-				"text" : "Seconds per Iteration",
-				"type" : "group",
-				"value" : ""
-			},
-			"secondsperiterationmode" : 
-			{
-				"index" : 24,
-				"options" : 
-				[
-					{
-						"label" : "Fixed",
-						"value" : "fixedSeconds"
-					},
-					{
-						"label" : "Random Range",
-						"value" : "randomSeconds"
-					},
-					{
-						"label" : "Infinity",
-						"value" : "infinitySeconds"
-					}
-				],
-				"order" : 124,
-				"text" : "Seconds per Iteration Mode",
-				"type" : "combo",
-				"value" : "fixedSeconds"
 			}
 		}
 	},

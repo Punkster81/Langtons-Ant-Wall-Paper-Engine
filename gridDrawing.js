@@ -3,25 +3,12 @@ let cellSize = getCellSize();
 let stepsPerSecond = getStepsPerSecond();
 let secondsPerIteration = getIterationDuration();
 
-// Direction enum
-const Direction = {
-    UP: 0,
-    RIGHT: 1,
-    DOWN: 2,
-    LEFT: 3,
-    count: 4
-};
 
 
 // Grid and ant variables
 let width, height, cols, rows;
 let grid;
-let ant = {
-    x: 0,
-    y: 0,
-    dir: Direction.UP,
-    state: 0
-};
+
 ///////////////////////////////////////  
 
 // Resize and initialize grid and ant
