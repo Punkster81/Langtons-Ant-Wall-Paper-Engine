@@ -23,6 +23,9 @@ function toggleControls() {
 
         controls.classList.remove('controls-hidden');
         showBtn.classList.remove('visible');
+        const rulesText = document.getElementById('customStates');
+
+        resizeTextarea(rulesText); // Resize once on page load
     } else {
 
         controls.classList.add('controls-hidden');
@@ -163,7 +166,8 @@ function setUI() {
     document.getElementById('resetBtn').addEventListener('click', resetSimulation);
     document.getElementById('toggleBtn').addEventListener('click', toggleControls);
     document.getElementById('showControlsBtn').addEventListener('click', toggleControls);
-    document.getElementById('applyStatesBtn').addEventListener('click', applyCustomRuleSet);
+
+
 
     setupCustomScroll();
 }
@@ -178,9 +182,21 @@ function hexToRGB(hex) {
     };
 }
 
+function resizeTextarea(textarea) {
+    if (!textarea) return;
+    textarea.style.height = 'auto';
+    textarea.style.height = textarea.scrollHeight + 'px';
+}
+
 function updateRulesBox() {
     let rules = exportCustomRulesToJSON();
+    console.log("Updated rules:", rules);
     document.getElementById('customStates').value = rules;
+    console.log(document.getElementById('customStates').value);
+    const rulesText = document.getElementById('customStates');
+
+    resizeTextarea(rulesText); // Resize once on page load
+
 }
 
 function adjustRadioGrids() {
@@ -396,10 +412,10 @@ function updateCellSizeControls() {
 function updateStepsControls() {
     const stepsControlsDiv = document.getElementById('stepsControls');
 
-let locationRadio = document.querySelector(`input[name="speedMode"][value="${properties.speedMode}"]`);
-if (locationRadio) {
-    locationRadio.checked = true;
-}
+    let locationRadio = document.querySelector(`input[name="speedMode"][value="${properties.speedMode}"]`);
+    if (locationRadio) {
+        locationRadio.checked = true;
+    }
 
     if (properties.speedMode === 'fixedSpeed') {
         // Show single slider for fixed speed
@@ -469,10 +485,10 @@ if (locationRadio) {
 function updateColorControls() {
     const colorControlsDiv = document.getElementById('colorControls');
 
-let locationRadio = document.querySelector(`input[name="colorsMode"][value="${properties.colorMode}"]`);
-if (locationRadio) {
-    locationRadio.checked = true;
-}
+    let locationRadio = document.querySelector(`input[name="colorsMode"][value="${properties.colorMode}"]`);
+    if (locationRadio) {
+        locationRadio.checked = true;
+    }
 
     if (properties.colorMode === 'fixedColor') {
         // Show single input for fixed colors
