@@ -44,6 +44,7 @@ const maxSteps = 200000; // change in wallpaper.properties cause cant use varaia
 //assign buttons their functions
 function setUI() {
     // Keyboard shortcuts
+    adjustRadioGrids();
     document.addEventListener('keydown', function (e) {
         switch (e.key.toLowerCase()) {
             case 'r':
@@ -89,24 +90,32 @@ function setUI() {
         link.click();
     });
 
-    document.getElementById('speedModeSelect').addEventListener('change', function (e) {
-        properties.speedMode = e.target.value;
-        updateStepsControls();
+    document.querySelectorAll('input[name="speedMode"]').forEach(function (radio) {
+        radio.addEventListener('change', function (e) {
+            properties.speedMode = e.target.value;
+            updateStepsControls();
+        });
     });
 
-    document.getElementById('cellModeSelect').addEventListener('change', function (e) {
-        properties.cellMode = e.target.value;
-        updateCellSizeControls();
+    document.querySelectorAll('input[name="cellMode"]').forEach(function (radio) {
+        radio.addEventListener('change', function (e) {
+            properties.cellMode = e.target.value;
+            updateCellSizeControls();
+        });
     });
 
-    document.getElementById('colorModeSelect').addEventListener('change', function (e) {
-        properties.colorMode = e.target.value;
-        updateColorControls();
+    document.querySelectorAll('input[name="colorMode"]').forEach(function (radio) {
+        radio.addEventListener('change', function (e) {
+            properties.colorMode = e.target.value;
+            updateColorControls();
+        });
     });
 
-    document.getElementById('rulesModeSelect').addEventListener('change', function (e) {
-        properties.numberOfRules = e.target.value;
-        updateRulesControls();
+    document.querySelectorAll('input[name="rulesMode"]').forEach(function (radio) {
+        radio.addEventListener('change', function (e) {
+            properties.numberOfRules = e.target.value;
+            updateRulesControls();
+        });
     });
 
     document.getElementById('randomRules').addEventListener("click", () => {
@@ -118,9 +127,11 @@ function setUI() {
 
     });
 
-    document.getElementById('secondsModeSelect').addEventListener('input', function (e) {
-        properties.secondsPerIterationMode = e.target.value;
-        updateSecondsControls();
+    document.querySelectorAll('input[name="secondsMode"]').forEach(function (radio) {
+        radio.addEventListener('input', function (e) {
+            properties.secondsPerIterationMode = e.target.value;
+            updateSecondsControls();
+        });
     });
 
     document.getElementById('showAntCheckbox').addEventListener('change', function (e) {
@@ -133,14 +144,19 @@ function setUI() {
     });
 
 
-    document.getElementById('controlsLocationSelect').addEventListener('change', function (e) {
-        properties.panelLocation = e.target.value;
-        updatePanelLocation();
+    document.querySelectorAll('input[name="controlsLocation"]').forEach(function (radio) {
+        radio.addEventListener('change', function (e) {
+            console.log('Controls location changed to:', e.target.value);
+            properties.panelLocation = e.target.value;
+            updatePanelLocation();
+        });
     });
 
-    document.getElementById('antsModeSelect').addEventListener('change', function (e) {
-        properties.antsMode = e.target.value;
-        updateAntsControls();
+    document.querySelectorAll('input[name="antsMode"]').forEach(function (radio) {
+        radio.addEventListener('change', function (e) {
+            properties.antsMode = e.target.value;
+            updateAntsControls();
+        });
     });
 
 
@@ -167,6 +183,21 @@ function updateRulesBox() {
     document.getElementById('customStates').value = rules;
 }
 
+function adjustRadioGrids() {
+    const groups = document.querySelectorAll('.radio-group');
+
+    groups.forEach(group => {
+        const count = group.querySelectorAll('input[type="radio"]').length;
+
+        if (count % 3 === 0) {
+            group.style.gridTemplateColumns = 'repeat(3, 1fr)';
+        } else if (count % 2 === 0) {
+            group.style.gridTemplateColumns = 'repeat(2, 1fr)';
+        } else {
+            group.style.gridTemplateColumns = 'repeat(auto-fit, minmax(120px, 1fr))';
+        }
+    });
+}
 
 
 function setupCustomScroll() {
@@ -282,8 +313,11 @@ function setupCustomScroll() {
 // Function to update cell size controls
 function updateCellSizeControls() {
     const cellSizeDiv = document.getElementById('cellControls');
-    let cellsControlDropdown = document.getElementById('cellModeSelect');
-    cellsControlDropdown.value = properties.cellMode; // Set the dropdown to the current cell mode
+
+    let locationRadio = document.querySelector(`input[name="cellMode"][value="${properties.cellMode}"]`);
+    if (locationRadio) {
+        locationRadio.checked = true;
+    }
 
     if (properties.cellMode === 'fixedCell') {
         // Show single slider for fixed cell size
@@ -362,8 +396,10 @@ function updateCellSizeControls() {
 function updateStepsControls() {
     const stepsControlsDiv = document.getElementById('stepsControls');
 
-    let stepsControlDropdown = document.getElementById('speedModeSelect');
-    stepsControlDropdown.value = properties.speedMode; // Set the dropdown to the current speed mode
+let locationRadio = document.querySelector(`input[name="speedMode"][value="${properties.speedMode}"]`);
+if (locationRadio) {
+    locationRadio.checked = true;
+}
 
     if (properties.speedMode === 'fixedSpeed') {
         // Show single slider for fixed speed
@@ -433,8 +469,10 @@ function updateStepsControls() {
 function updateColorControls() {
     const colorControlsDiv = document.getElementById('colorControls');
 
-    let colorControlDropdown = document.getElementById('colorModeSelect');
-    colorControlDropdown.value = properties.colorMode; // Set the dropdown to the current color mode
+let locationRadio = document.querySelector(`input[name="colorsMode"][value="${properties.colorMode}"]`);
+if (locationRadio) {
+    locationRadio.checked = true;
+}
 
     if (properties.colorMode === 'fixedColor') {
         // Show single input for fixed colors
@@ -494,8 +532,10 @@ function updateColorControls() {
 function updateRulesControls() {
     const rulesControlsDiv = document.getElementById('rulesControls');
 
-    let rulesControlDropdown = document.getElementById('rulesModeSelect');
-    rulesControlDropdown.value = properties.numberOfRules; // Set the dropdown to the current rules mode
+    let locationRadio = document.querySelector(`input[name="rulesMode"][value="${properties.numberOfRules}"]`);
+    if (locationRadio) {
+        locationRadio.checked = true;
+    }
 
     if (properties.numberOfRules === 'fixedRules') {
         // Show single input for fixed rules
@@ -557,8 +597,10 @@ function updateSecondsControls() {
     const secondsControlsDiv = document.getElementById('secondsControls');
     //seconds is checked during animation, so no need to call a function to update
 
-    let secondsControlDropdown = document.getElementById('secondsModeSelect');
-    secondsControlDropdown.value = properties.secondsPerIterationMode; // Set the dropdown to the current seconds mode
+    let locationRadio = document.querySelector(`input[name="secondsMode"][value="${properties.secondsPerIterationMode}"]`);
+    if (locationRadio) {
+        locationRadio.checked = true;
+    }
 
     if (properties.secondsPerIterationMode === 'fixedSeconds') {
         secondsControlsDiv.innerHTML = `
@@ -630,9 +672,10 @@ function updatePanelLocation() {
     const panel = document.querySelector('.controls'); // Changed to target .controls
     const showPanelBtn = document.querySelector('.show-controls-btn');
 
-    let LocationSelect = document.getElementById('controlsLocationSelect');
-    LocationSelect.value = properties.panelLocation;
-
+    let locationRadio = document.querySelector(`input[name="controlsLocation"][value="${properties.panelLocation}"]`);
+    if (locationRadio) {
+        locationRadio.checked = true;
+    }
     if (!panel) return;
     if (!showPanelBtn) return;
 

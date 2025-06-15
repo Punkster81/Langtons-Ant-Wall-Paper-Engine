@@ -28,7 +28,7 @@ function applyCustomRuleSet() {
     try {
         const parsed = JSON.parse(input);
 
-        if ((parsed.colors &&!Array.isArray(parsed.colors)) || typeof parsed.rules !== 'object') {
+        if ((parsed.colors && !Array.isArray(parsed.colors)) || typeof parsed.rules !== 'object') {
             throw new Error("Invalid JSON structure.");
         }
 
@@ -53,8 +53,7 @@ function applyCustomRuleSet() {
         const saturation = 90;
         const lightness = 50;
         // Generate additional colors if needed
-        for (let i = colors.length; i < maxColorIndex; i++)
-        {
+        for (let i = colors.length; i < maxColorIndex; i++) {
             const hue = (hueStart + i * hueStep) % 360;
             colors.push(hslToHex(hue, saturation, lightness));
         }
@@ -154,47 +153,49 @@ function generateRandomRules(numColors, numStates) {
 
 function exportJSON() {
     const data = {
-      rules,
-      colors,
+        rules,
+        colors,
     };
-  
+
     const jsonStr = JSON.stringify(data, null, 2);
     const blob = new Blob([jsonStr], { type: "application/json" });
     const url = URL.createObjectURL(blob);
-  
+
     const a = document.createElement("a");
     a.href = url;
     a.download = "langtons-ant-config.json";
     a.click();
-  
+
     URL.revokeObjectURL(url);
-  }
-  
-  function importJSON(event) {
+}
+
+function importJSON(event) {
     const file = event.target.files[0];
     if (!file) return;
-  
+
     const reader = new FileReader();
     reader.onload = function (e) {
-      try {
-        const data = JSON.parse(e.target.result);
-  
-        // Apply settings from imported JSON
-        if (data.rules) rules = data.rules;
-        if (data.colors) colors = data.colors;
-  
-        // Optionally reinitialize
+        try {
+            const data = JSON.parse(e.target.result);
 
-        resizeCanvas();
-        updateRulesBox();
-      } catch (error) {
-        showError("Invalid JSON file: " + error.message);
-      }
+            // Apply settings from imported JSON
+            if (data.rules) rules = data.rules;
+            if (data.colors) colors = data.colors;
+
+            // Optionally reinitialize
+
+            resizeCanvas();
+            updateRulesBox();
+            const input = document.getElementById('jsonFileInput');
+            input.value = ''; // Clear the previously selected file
+        } catch (error) {
+            showError("Invalid JSON file: " + error.message);
+        }
     };
-  
+
     reader.readAsText(file);
-  }
-  
+}
+
 
 
 

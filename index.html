@@ -159,34 +159,64 @@
             background: #f9f9f9;
         }
 
-        .controls select {
-            appearance: none;
-            -webkit-appearance: none;
-            -moz-appearance: none;
-            background-color: #f9f9f9;
-            border: 1px solid #aaa;
-            border-radius: 0.3vh;
-            padding: 0.5vh 1vw;
-            font-size: 1.2vmin;
-            color: #333;
-            cursor: pointer;
-            width: auto;
-            min-width: 8vw;
-        }
+.radio-group {
+    display: grid;
+    gap: 8px;
+    margin: 12px 0;
+    padding-left: 0;
+}
 
-        .controls select {
-            background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 10 6' xmlns='http://www.w3.org/2000/svg'%3E%3Cpath d='M0 0l5 6 5-6H0z' fill='%23666'/%3E%3C/svg%3E");
-            background-repeat: no-repeat;
-            background-position: right 0.7vw center;
-            background-size: 0.8vw auto;
-            padding-right: 2vw;
-        }
 
-        .controls select:focus {
-            outline: none;
-            border-color: #555;
-            background-color: #f0f0f0;
-        }
+.radio-group label {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+    font-size: 0.95em;
+    cursor: pointer;
+    background-color: rgba(255, 255, 255, 0.05);
+    padding: 10px;
+    border-radius: 6px;
+    transition: background-color 0.2s ease, border 0.2s ease;
+    border: 1px solid transparent;
+}
+
+.radio-group label:hover {
+    background-color: rgba(255, 255, 255, 0.1);
+    border-color: rgba(255, 255, 255, 0.2);
+}
+
+.radio-group input[type="radio"] {
+    appearance: none;
+    width: 16px;
+    height: 16px;
+    border: 2px solid #ccc;
+    border-radius: 50%;
+    position: relative;
+    transition: border-color 0.2s;
+    background-color: transparent;
+}
+
+.radio-group input[type="radio"]:checked {
+    border-color: #00c4ff;
+    background-color: #00c4ff;
+}
+
+.radio-group input[type="radio"]::after {
+    content: "";
+    position: absolute;
+    width: 6px;
+    height: 6px;
+    top: 4px;
+    left: 4px;
+    border-radius: 50%;
+    background: white;
+    display: none;
+}
+
+.radio-group input[type="radio"]:checked::after {
+    display: block;
+}
+
 
         .controls button {
             margin: 0.8vh 1vw 0.8vh 0;
@@ -272,8 +302,6 @@
             border: none;
             border-top: 2px solid #ccc;
         }
-
-       
     </style>
 </head>
 
@@ -281,32 +309,28 @@
     <canvas id="canvas"></canvas>
 
 
-     <div class="controls controls-hidden" id="controls">
+    <div class="controls controls-hidden" id="controls">
         <!-- ADDED: Wrapper for custom scrollbar implementation -->
-        <div class="controls-wrapper" id ="controlsWrapper">
+        <div class="controls-wrapper" id="controlsWrapper">
             <div class="controls-content" id="controlsContent">
                 <div id="panelPlacement">
-                    <label>
-                        Controls Panel Location:
-                        <select id="controlsLocationSelect">
-                            <option value="topLeft">Top Left</option>
-                            <option value="topRight">Top Right</option>
-                            <option value="bottomLeft">Bottom Left</option>
-                            <option value="bottomRight">Bottom Right</option>
-                        </select>
-                    </label>
+                    <label>Controls Panel Location:</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="controlsLocation" value="topLeft" checked> Top Left</label>
+                        <label><input type="radio" name="controlsLocation" value="topRight"> Top Right</label>
+                        <label><input type="radio" name="controlsLocation" value="bottomLeft"> Bottom Left</label>
+                        <label><input type="radio" name="controlsLocation" value="bottomRight"> Bottom Right</label>
+                    </div>
                 </div>
 
                 <hr class="section-divider">
                 <!-- Basic Controls -->
                 <div id="cellSize">
-                    <label>
-                        Cell Mode:
-                        <select id="cellModeSelect">
-                            <option value="fixedCell">Fixed</option>
-                            <option value="randomCell">Random Range</option>
-                        </select>
-                    </label>
+                    <label>Cell Mode:</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="cellMode" value="fixedCell" checked> Fixed</label>
+                        <label><input type="radio" name="cellMode" value="randomCell"> Random Range</label>
+                    </div>
                     <div id="cellControls">
                         <!-- Dynamic content will be inserted here -->
                     </div>
@@ -314,13 +338,11 @@
                 <hr class="section-divider">
 
                 <div id="steps">
-                    <label>
-                        Speed Mode:
-                        <select id="speedModeSelect">
-                            <option value="fixedSpeed">Fixed</option>
-                            <option value="randomSpeed">Random Range</option>
-                        </select>
-                    </label>
+                    <label>Speed Mode:</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="speedMode" value="fixedSpeed" checked> Fixed</label>
+                        <label><input type="radio" name="speedMode" value="randomSpeed"> Random Range</label>
+                    </div>
                     <div id="stepsControls">
                         <!-- Dynamic content will be inserted here -->
                     </div>
@@ -328,13 +350,11 @@
                 <hr class="section-divider">
 
                 <div id="colors">
-                    <label>
-                        Color Mode:
-                        <select id="colorModeSelect">
-                            <option value="fixedColor">Fixed</option>
-                            <option value="randomColor">Random Range</option>
-                        </select>
-                    </label>
+                    <label>Color Mode:</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="colorMode" value="fixedColor" checked> Fixed</label>
+                        <label><input type="radio" name="colorMode" value="randomColor"> Random Range</label>
+                    </div>
 
                     <div id="colorControls">
                         <!-- Dynamic content will be inserted here -->
@@ -343,13 +363,11 @@
                 <hr class="section-divider">
 
                 <div id="rules">
-                    <label>
-                        Rules Mode:
-                        <select id="rulesModeSelect">
-                            <option value="fixedRules">Fixed</option>
-                            <option value="randomRules">Random Range</option>
-                        </select>
-                    </label>
+                    <label>Rules Mode:</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="rulesMode" value="fixedRules" checked> Fixed</label>
+                        <label><input type="radio" name="rulesMode" value="randomRules"> Random Range</label>
+                    </div>
 
                     <div id="rulesControls">
                         <!-- Dynamic content will be inserted here -->
@@ -359,14 +377,12 @@
                 <hr class="section-divider">
 
                 <div id="secondsPerIteration">
-                    <label>
-                        Seconds per Iteration Mode:
-                        <select id="secondsModeSelect">
-                            <option value="fixedSeconds">Fixed</option>
-                            <option value="randomSeconds">Random Range</option>
-                            <option value="infinitySeconds">Infinity</option>
-                        </select>
-                    </label>
+                    <label>Seconds per Iteration Mode:</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="secondsMode" value="fixedSeconds" checked> Fixed</label>
+                        <label><input type="radio" name="secondsMode" value="randomSeconds"> Random Range</label>
+                        <label><input type="radio" name="secondsMode" value="infinitySeconds"> Infinity</label>
+                    </div>
 
                     <div id="secondsControls">
                         <!-- Dynamic content will be inserted here -->
@@ -387,13 +403,11 @@
                             <input type="color" id="antColorPicker" value="#ff0000">
                         </label>
                     </div>
-                    <label>
-                        Ant(s) Mode:
-                        <select id="antsModeSelect">
-                            <option value="fixedAnts">Fixed</option>
-                            <option value="randomAnts">Random Range</option>
-                        </select>
-                    </label>
+                    <label>Ant(s) Mode:</label>
+                    <div class="radio-group">
+                        <label><input type="radio" name="antsMode" value="fixedAnts" checked> Fixed</label>
+                        <label><input type="radio" name="antsMode" value="randomAnts"> Random Range</label>
+                    </div>
                     <div id="antsControls">
 
                     </div>
@@ -432,7 +446,7 @@
                 </div>
                 <div id="errorMsg" class="error"></div>
             </div>
-            
+
             <!-- ADDED: Scroll buttons -->
             <button class="scroll-button scroll-up" id="scrollUpBtn" title="Scroll Up">▲</button>
             <button class="scroll-button scroll-down" id="scrollDownBtn" title="Scroll Down">▼</button>
