@@ -114,7 +114,7 @@
 				"type" : "bool",
 				"value" : false
 			},
-			"fixedNumberOfAnts" : 
+			"fixednumberofants" : 
 			{
 				"condition" : "antsmode.value == \"fixedAnts\"",
 				"fraction" : false,
@@ -235,7 +235,7 @@
 				"type" : "slider",
 				"value" : 100000
 			},
-			"minantss" : 
+			"minants" : 
 			{
 				"condition" : "antsmode.value==\"randomAnts\"",
 				"fraction" : false,
@@ -243,7 +243,7 @@
 				"max" : 100,
 				"min" : 1,
 				"order" : 123,
-				"text" : "Min Ants(s)",
+				"text" : "Min Ant(s)",
 				"type" : "slider",
 				"value" : 1
 			},

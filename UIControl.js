@@ -12,7 +12,7 @@ let successTimeout = null;
 function showError(message) {
     const consoleMsg = document.getElementById("consoleMessge");
     const errorMsg = document.getElementById('errorMsg');
-    
+
     errorMsg.textContent = message;
     consoleMsg.style.display = "block";
     scrollToDiv('.controls', '.error');
@@ -319,18 +319,19 @@ function setupCustomScroll() {
 
     let scrollInterval = null;
 
-    function startScrolling(direction) {
-        const step = 10; // smaller steps for smoother scrolling
-        scrollInterval = setInterval(() => {
-            if (direction === 'up') {
-                controlsContent.scrollTop = Math.max(0, controlsContent.scrollTop - step);
-            } else if (direction === 'down') {
-                const maxScroll = controlsContent.scrollHeight - controlsContent.clientHeight;
-                controlsContent.scrollTop = Math.min(maxScroll, controlsContent.scrollTop + step);
-            }
-            updateScrollButtons();
-        }, 16); // ~60fps
-    }
+function startScrolling(direction) {
+    const step = 3; // smaller number = slower scroll
+    scrollInterval = setInterval(() => {
+        if (direction === 'up') {
+            controlsContent.scrollTop = Math.max(0, controlsContent.scrollTop - step);
+        } else if (direction === 'down') {
+            const maxScroll = controlsContent.scrollHeight - controlsContent.clientHeight;
+            controlsContent.scrollTop = Math.min(maxScroll, controlsContent.scrollTop + step);
+        }
+        updateScrollButtons();
+    }, 16); // keep at ~60fps for smoothness
+}
+
 
     function stopScrolling() {
         clearInterval(scrollInterval);
@@ -789,6 +790,16 @@ function updatePanelLocation() {
 
 function updateAntsControls() {
     const antsDiv = document.getElementById('antsControls');
+
+
+    let locationRadio = document.querySelector(`input[name="antsMode"][value="${properties.antsMode}"]`);
+    if (locationRadio) {
+        locationRadio.checked = true;
+    }
+    let randomrules = document.getElementById('antRulesCheckbox');
+    if(randomrules){
+        randomrules.checked = properties.differentRulesPerAnt;
+    }
 
     if (properties.antsMode === 'fixedAnts') {
         // Show single slider for fixed number of ants

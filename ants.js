@@ -31,18 +31,19 @@ class Ant {
             }
 
             const cellColor = grid[this.y][this.x];
-            const stateRules = this.rules[this.state];
-            if (!stateRules || !stateRules[cellColor]) {
-                showError(`Missing rule for state ${this.state} or color ${cellColor}`);
+            const stateRules = this.rules[this.state]
+            if (!stateRules) {
+                showError(`Missing rule for state ${this.state}`);
                 stopAnimation();
                 return;
             }
+            
 
-            const rule = stateRules[cellColor];
+            const rule = stateRules[cellColor] || stateRules[0];//default if ant doesnt know that color treat it as first color, always black 
 
             // Write new color
             grid[this.y][this.x] = rule.writeColor;
-            ctx.fillStyle = this.colors[rule.writeColor] || "#000000";
+            ctx.fillStyle = this.colors[rule.writeColor];
             ctx.fillRect(
                 Math.floor(this.x * cellSize),
                 Math.floor(this.y * cellSize),
@@ -162,7 +163,7 @@ function createAnts() {
 
     // Calculate optimal row layout
     const layout = calculateRowLayout(numberOfAnts, cols, rows);
-    
+
     let antCount = 0;
     let sharedRulesColors = null;
 
@@ -175,10 +176,10 @@ function createAnts() {
     for (let rowIndex = 0; rowIndex < layout.rowConfig.length && antCount < numberOfAnts; rowIndex++) {
         const antsInThisRow = layout.rowConfig[rowIndex];
         const rowY = centerY + layout.rowOffsets[rowIndex];
-        
+
         // Calculate horizontal spacing for this row
         const horizontalSpacing = antsInThisRow > 1 ? Math.min(cols / (antsInThisRow + 1), cols * 0.8 / antsInThisRow) : 0;
-        
+
         for (let colIndex = 0; colIndex < antsInThisRow && antCount < numberOfAnts; colIndex++) {
             let x;
             if (antsInThisRow === 1) {
@@ -189,7 +190,7 @@ function createAnts() {
                 const startX = centerX - (horizontalSpacing * (antsInThisRow - 1)) / 2;
                 x = Math.floor(startX + colIndex * horizontalSpacing);
             }
-            
+
             // Ensure ant stays within bounds
             x = Math.max(0, Math.min(cols - 1, x));
             const y = Math.max(0, Math.min(rows - 1, rowY));
@@ -230,7 +231,7 @@ function createAnts() {
 
     // Calculate optimal row layout
     const layout = calculateRowLayout(numberOfAnts, cols, rows);
-    
+
     let antCount = 0;
     let sharedRulesColors = null;
 
@@ -243,10 +244,10 @@ function createAnts() {
     for (let rowIndex = 0; rowIndex < layout.rowConfig.length && antCount < numberOfAnts; rowIndex++) {
         const antsInThisRow = layout.rowConfig[rowIndex];
         const rowY = centerY + layout.rowOffsets[rowIndex];
-        
+
         // Calculate horizontal spacing for this row
         const horizontalSpacing = antsInThisRow > 1 ? Math.min(cols / (antsInThisRow + 1), cols * 0.8 / antsInThisRow) : 0;
-        
+
         for (let colIndex = 0; colIndex < antsInThisRow && antCount < numberOfAnts; colIndex++) {
             let x;
             if (antsInThisRow === 1) {
@@ -257,7 +258,7 @@ function createAnts() {
                 const startX = centerX - (horizontalSpacing * (antsInThisRow - 1)) / 2;
                 x = Math.floor(startX + colIndex * horizontalSpacing);
             }
-            
+
             // Ensure ant stays within bounds
             x = Math.max(0, Math.min(cols - 1, x));
             const y = Math.max(0, Math.min(rows - 1, rowY));
@@ -280,7 +281,7 @@ function createAntsFromRulesArray(rulesAndColorsArray) {
     if (!rulesAndColorsArray || rulesAndColorsArray.length === 0) return;
 
     const numAnts = rulesAndColorsArray.length;
-    
+
     // Calculate the center of the grid
     const centerX = Math.floor(cols / 2);
     const centerY = Math.floor(rows / 2);
@@ -294,17 +295,17 @@ function createAntsFromRulesArray(rulesAndColorsArray) {
 
     // Calculate optimal row layout for the number of ants we have
     const layout = calculateRowLayout(numAnts, cols, rows);
-    
+
     let antIndex = 0;
 
     // Position ants according to the calculated layout
     for (let rowIndex = 0; rowIndex < layout.rowConfig.length && antIndex < numAnts; rowIndex++) {
         const antsInThisRow = layout.rowConfig[rowIndex];
         const rowY = centerY + layout.rowOffsets[rowIndex];
-        
+
         // Calculate horizontal spacing for this row
         const horizontalSpacing = antsInThisRow > 1 ? Math.min(cols / (antsInThisRow + 1), cols * 0.8 / antsInThisRow) : 0;
-        
+
         for (let colIndex = 0; colIndex < antsInThisRow && antIndex < numAnts; colIndex++) {
             let x;
             if (antsInThisRow === 1) {
@@ -315,7 +316,7 @@ function createAntsFromRulesArray(rulesAndColorsArray) {
                 const startX = centerX - (horizontalSpacing * (antsInThisRow - 1)) / 2;
                 x = Math.floor(startX + colIndex * horizontalSpacing);
             }
-            
+
             // Ensure ant stays within bounds
             x = Math.max(0, Math.min(cols - 1, x));
             const y = Math.max(0, Math.min(rows - 1, rowY));
@@ -333,12 +334,12 @@ function recenterAnts() {
     // If we have fewer ants than desired, create new ones
     if (ants.length < numberOfAnts) {
         let sharedRulesColors = null;
-        
+
         // Generate shared rules if all ants use the same rules
         if (!properties.differentRulesPerAnt) {
             sharedRulesColors = ants[0] ? { rules: ants[0].rules, colors: ants[0].colors } : generateRandomRules(getColorCount(), getStateCount());
         }
-        
+
         // Create additional ants to reach the desired number
         while (ants.length < numberOfAnts) {
             if (properties.differentRulesPerAnt || sharedRulesColors === null) {
@@ -371,17 +372,17 @@ function recenterAnts() {
 
     // Calculate optimal row layout
     const layout = calculateRowLayout(ants.length, cols, rows);
-    
+
     let antIndex = 0;
 
     // Position existing ants according to the calculated layout
     for (let rowIndex = 0; rowIndex < layout.rowConfig.length && antIndex < ants.length; rowIndex++) {
         const antsInThisRow = layout.rowConfig[rowIndex];
         const rowY = centerY + layout.rowOffsets[rowIndex];
-        
+
         // Calculate horizontal spacing for this row
         const horizontalSpacing = antsInThisRow > 1 ? Math.min(cols / (antsInThisRow + 1), cols * 0.8 / antsInThisRow) : 0;
-        
+
         for (let colIndex = 0; colIndex < antsInThisRow && antIndex < ants.length; colIndex++) {
             let x;
             if (antsInThisRow === 1) {
@@ -392,7 +393,7 @@ function recenterAnts() {
                 const startX = centerX - (horizontalSpacing * (antsInThisRow - 1)) / 2;
                 x = Math.floor(startX + colIndex * horizontalSpacing);
             }
-            
+
             // Ensure ant stays within bounds
             x = Math.max(0, Math.min(cols - 1, x));
             const y = Math.max(0, Math.min(rows - 1, rowY));
@@ -411,15 +412,15 @@ function recenterAnts() {
 // Helper function to calculate optimal row layout
 function calculateRowLayout(totalAnts, gridCols, gridRows) {
     const centerY = Math.floor(gridRows / 2);
-    
+
     // Determine optimal number of rows based on total ants and grid dimensions
     let numRows = Math.min(Math.ceil(Math.sqrt(totalAnts)), Math.floor(gridRows * 0.8));
     numRows = Math.max(1, numRows); // At least one row
-    
+
     // Distribute ants across rows as evenly as possible
     const baseAntsPerRow = Math.floor(totalAnts / numRows);
     const extraAnts = totalAnts % numRows;
-    
+
     const rowConfig = [];
     for (let i = 0; i < numRows; i++) {
         // Distribute extra ants to middle rows first
@@ -428,11 +429,11 @@ function calculateRowLayout(totalAnts, gridCols, gridRows) {
         const getsExtraAnt = i < extraAnts || (extraAnts > 0 && distanceFromMiddle <= Math.floor(extraAnts / 2));
         rowConfig.push(baseAntsPerRow + (getsExtraAnt ? 1 : 0));
     }
-    
+
     // Calculate vertical offsets for each row
     const rowOffsets = [];
     const verticalSpacing = numRows > 1 ? Math.min(gridRows / (numRows + 1), gridRows * 0.6 / numRows) : 0;
-    
+
     for (let i = 0; i < numRows; i++) {
         if (numRows === 1) {
             rowOffsets.push(0); // Single row at center
@@ -454,12 +455,12 @@ function calculateRowLayout(totalAnts, gridCols, gridRows) {
             }
         }
     }
-    
+
     // Ensure all row positions are within bounds
     for (let i = 0; i < rowOffsets.length; i++) {
         rowOffsets[i] = Math.max(-centerY, Math.min(gridRows - 1 - centerY, Math.floor(rowOffsets[i])));
     }
-    
+
     return {
         rowConfig: rowConfig,
         rowOffsets: rowOffsets

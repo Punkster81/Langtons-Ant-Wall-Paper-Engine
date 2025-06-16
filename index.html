@@ -105,14 +105,16 @@
         }
 
         .controls.bottom-left {
-            bottom: clamp(10px, 2vh, 40px);
+            bottom: calc(env(safe-area-inset-bottom, 5px) + 40px);
+
             left: 1vw;
             top: auto;
             right: auto;
         }
 
         .controls.bottom-right {
-            bottom: clamp(10px, 2vh, 40px);
+            bottom: calc(env(safe-area-inset-bottom, 5px) + 40px);
+
             right: 1vw;
             top: auto;
             left: auto;
@@ -273,14 +275,15 @@
         }
 
         .show-controls-btn.bottom-left {
-            bottom: max(1vh, env(safe-area-inset-bottom, 40px));
+            bottom: calc(env(safe-area-inset-bottom, 5px) + 40px);
             left: 1vw;
             top: auto;
             right: auto;
         }
 
         .show-controls-btn.bottom-right {
-            bottom: max(1vh, env(safe-area-inset-bottom, 40px));
+            bottom: calc(env(safe-area-inset-bottom, 5px) + 40px);
+
             right: 1vw;
             top: auto;
             left: auto;

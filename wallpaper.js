@@ -26,7 +26,7 @@ window.wallpaperPropertyListener = {
 
         if (userProperties.mincellsize !== undefined) {
             properties.minCellSize = userProperties.mincellsize.value;
-            
+
         }
 
         if (userProperties.maxcellsize !== undefined) {
@@ -92,24 +92,24 @@ window.wallpaperPropertyListener = {
         if (userProperties.antcolor !== undefined) {
             properties.antColor = parseColor(userProperties.antcolor.value);
         }
-        
-        if (userProperties.fixedNumberOfAnts !== undefined) {
-            properties.fixedNumberOfAnts = userProperties.fixedNumberOfAnts.value;
+
+        if (userProperties.fixednumberofants !== undefined) {
+            properties.fixedNumberOfAnts = userProperties.fixednumberofants.value;
         }
 
-        if (userProperties.minNumberOfAnts !== undefined) {
-            properties.minNumberOfAnts = userProperties.minNumberOfAnts.value;
+        if (userProperties.minants !== undefined) {
+            properties.minNumberOfAnts = userProperties.minants.value;
         }
 
-        if (userProperties.maxNumberOfAnts !== undefined) {
-            properties.maxNumberOfAnts = userProperties.maxNumberOfAnts.value;
+        if (userProperties.maxants !== undefined) {
+            properties.maxNumberOfAnts = userProperties.maxants.value;
         }
 
-        if( userProperties.eachantdifferentrules !== undefined) {
-            properties.differentRulesPerAnt = userProperties.eachantdifferentrules.value;
+        if (userProperties.eachantshasitsownrules !== undefined) {
+            properties.differentRulesPerAnt = userProperties.eachantshasitsownrules.value;
         }
 
-        if( userProperties.antsmode !== undefined){
+        if (userProperties.antsmode !== undefined) {
             properties.antsMode = userProperties.antsmode.value;
         }
 
@@ -144,13 +144,13 @@ window.wallpaperPropertyListener = {
         // if (userProperties.schemecolor !== undefined) {
         //     properties.schemeColor = parseColor(userProperties.schemecolor.value);
         // }
-        initializeWallPaperEngine();    
+        initializeWallPaperEngine();
     },
 
 
 
 
-    
+
 };
 
 function initializeWallPaperEngine() {
