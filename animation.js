@@ -35,9 +35,6 @@ let loopDuration;
 
 let stepsTaken
 
-function getTrueSpeed(){
-    return tempOverrideSpeed ? tempOverrideSpeed : (properties.speedMode === 'fixedSpeed' ? getStepsPerSecond() : stepsPerSecond);
-}
 
 function animate(timestamp) {
     if (!isRunning) return;  // stop if paused
@@ -51,7 +48,7 @@ function animate(timestamp) {
     }
 
     // Check if simulation duration exceeded
-    if (timestamp - simulationStartTime > (properties.secondsPerIterationMode !== 'randomSeconds' ? getIterationDuration() : stepsPerSecond))// if fixed/infinite duration, get fixed duration, if random, random is set at cavas resize, once per run dont get random every frame
+    if (timestamp - simulationStartTime > secondsPerIteration)// if fixed/infinite duration, get fixed duration, if random, random is set at cavas resize, once per run dont get random every frame
     {
         newSimulation();
         return;
@@ -59,16 +56,16 @@ function animate(timestamp) {
 
     const elapsed = timestamp - lastTimestamp; //in ms
 
-    const maxStepsPerSecond = getTrueSpeed();
 
+    const actualSpeed = tempOverrideSpeed ?? stepsPerSecond;
 
-    const interval = 1000 / maxStepsPerSecond; // ms per step //if fixed speed get fixed speed, if random, random is set at cavas resize, once per run dont get random every frame
+    const interval = 1000 / actualSpeed; // ms per step //if fixed speed get fixed speed, if random, random is set at cavas resize, once per run dont get random every frame
 
     if (elapsed >= interval) {
         const stepsToRun = Math.floor(elapsed / interval);
 
         // CHANGED: Cap the maximum catch-up to 1 second worth of steps
-        const maxSteps = Math.min(stepsToRun, maxStepsPerSecond); // Cap to 1 second worth
+        const maxSteps = Math.min(stepsToRun, actualSpeed); // Cap to 1 second worth
 
         // Start timing the ant stepping loop
         const loopStartTime = performance.now();
@@ -87,10 +84,10 @@ function animate(timestamp) {
             const excessTime = loopDuration - frameMaxThreshold; // How much over
 
             const scalingFactor = .10
-            const newSpeed = Math.max(1, Math.floor(maxStepsPerSecond * (1-scalingFactor)));
+            const newSpeed = Math.max(1, Math.floor(actualSpeed * (1-scalingFactor)));
             tempOverrideSpeed = newSpeed;
 
-            showError(`Performance adjustment: Loop took ${loopDuration.toFixed(2)}ms (${excessTime.toFixed(2)}ms over limit), reducing speed by ${scalingFactor*100}% to ${tempOverrideSpeed} from ${maxStepsPerSecond} steps/sec`);
+            showError(`Performance adjustment: Loop took ${loopDuration.toFixed(2)}ms (${excessTime.toFixed(2)}ms over limit), reducing speed by ${scalingFactor*100}% to ${tempOverrideSpeed} from ${actualSpeed} steps/sec`);
         }
 
         // CHANGED: If we hit the cap, reset timing to prevent further catch-up

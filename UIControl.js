@@ -70,7 +70,6 @@ function scrollToDiv(containerSelector, targetDivSelector, options = {}) {
     const scrollOptions = { ...defaults, ...options };
 
     targetDiv.scrollIntoView(scrollOptions);
-    setupCustomScroll();
 }
 
 
@@ -278,7 +277,6 @@ function adjustRadioGrids() {
 
 
 function setupCustomScroll() {
-    const controlsWrapper = document.getElementById('controlsWrapper');
     const controlsContent = document.getElementById('controlsContent');
     const scrollUpBtn = document.getElementById('scrollUpBtn');
     const scrollDownBtn = document.getElementById('scrollDownBtn');
@@ -319,18 +317,18 @@ function setupCustomScroll() {
 
     let scrollInterval = null;
 
-function startScrolling(direction) {
-    const step = 3; // smaller number = slower scroll
-    scrollInterval = setInterval(() => {
-        if (direction === 'up') {
-            controlsContent.scrollTop = Math.max(0, controlsContent.scrollTop - step);
-        } else if (direction === 'down') {
-            const maxScroll = controlsContent.scrollHeight - controlsContent.clientHeight;
-            controlsContent.scrollTop = Math.min(maxScroll, controlsContent.scrollTop + step);
-        }
-        updateScrollButtons();
-    }, 16); // keep at ~60fps for smoothness
-}
+    function startScrolling(direction) {
+        const step = 10; // smaller number = slower scroll
+        scrollInterval = setInterval(() => {
+            if (direction === 'up') {
+                controlsContent.scrollTop = Math.max(0, controlsContent.scrollTop - step);
+            } else if (direction === 'down') {
+                const maxScroll = controlsContent.scrollHeight - controlsContent.clientHeight;
+                controlsContent.scrollTop = Math.min(maxScroll, controlsContent.scrollTop + step);
+            }
+            updateScrollButtons();
+        }, 16); // keep at ~60fps for smoothness
+    }
 
 
     function stopScrolling() {
@@ -797,7 +795,7 @@ function updateAntsControls() {
         locationRadio.checked = true;
     }
     let randomrules = document.getElementById('antRulesCheckbox');
-    if(randomrules){
+    if (randomrules) {
         randomrules.checked = properties.differentRulesPerAnt;
     }
 
