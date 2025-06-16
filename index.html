@@ -74,6 +74,8 @@
             bottom: 5px;
         }
 
+
+
         /* ADDED: Custom scroll controls container */
         .controls-wrapper {
             position: relative;
@@ -103,14 +105,14 @@
         }
 
         .controls.bottom-left {
-            bottom: max(1vh, env(safe-area-inset-bottom, 40px));
+            bottom: clamp(10px, 2vh, 40px);
             left: 1vw;
             top: auto;
             right: auto;
         }
 
         .controls.bottom-right {
-            bottom: max(1vh, env(safe-area-inset-bottom, 40px));
+            bottom: clamp(10px, 2vh, 40px);
             right: 1vw;
             top: auto;
             left: auto;
@@ -233,11 +235,7 @@
             background: #555;
         }
 
-        .error {
-            color: #ff6666;
-            font-size: 1vmin;
-            margin-top: 0.8vh;
-        }
+
 
         .controls-hidden {
             display: none;
@@ -301,6 +299,41 @@
             margin: 20px 0;
             border: none;
             border-top: 2px solid #ccc;
+        }
+
+        .stats-menu h4 {
+            margin: 0 0 8px 0;
+            color: #00c4ff;
+            font-size: 1.3em;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.3);
+            padding-bottom: 4px;
+        }
+
+        .stats-item {
+            margin: 6px 0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .stats-label {
+            color: #ccc;
+            font-weight: normal;
+        }
+
+        .stats-value {
+            color: white;
+            font-weight: bold;
+            font-family: 'Courier New', monospace;
+        }
+
+
+        .error {
+            color: #ff6666;
+        }
+
+        .success {
+            color: green;
         }
     </style>
 </head>
@@ -455,12 +488,36 @@
                     <button id="toggleBtn" title="Hide Controls">➖</button>
                 </div>
                 <hr class="section-divider">
-                <label>Stats:</label>
-                <!-- Info & Errors -->
-                <div style="margin-top: 10px; ">
-                    Grid: <span id="gridInfo"></span>
+                <!-- Separate Stats Menu -->
+                <div class="stats-menu" id="statsMenu">
+                    <h4>📊 Statistics</h4>
+                    <div class="stats-item">
+                        <span class="stats-label">Grid:</span>
+                        <span class="stats-value" id="gridInfo">-</span>
+                    </div>
+                    <div class="stats-item">
+                        <span class="stats-label">FPS:</span>
+                        <span class="stats-value" id="frameTime">-</span>
+                    </div>
+                    <div class="stats-item">
+                        <span class="stats-label">Ant #:</span>
+                        <span class="stats-value" id="antCount">-</span>
+                    </div>
+                    <div class="stats-item">
+                        <span class="stats-label">Steps Taken:</span>
+                        <span class="stats-value" id="stepsTaken">-</span>
+                    </div>
+                    <div class="stats-item">
+                        <span class="stats-label">Steps per Second:</span>
+                        <span class="stats-value" id="stepsPerSecondStat">-</span>
+                    </div>
+                    <div class="stats-item" style=" display:none;" id="consoleMessge">
+                        <span class="stats-label">Console:</span>
+                        <span class="stats-value success" id="successMsg"></span>
+                        <span class="stats-value error" id="errorMsg"></span>
+
+                    </div>
                 </div>
-                <div id="errorMsg" class="error"></div>
             </div>
 
             <!-- ADDED: Scroll buttons -->
@@ -468,6 +525,8 @@
             <button class="scroll-button scroll-down" id="scrollDownBtn" title="Scroll Down">▼</button>
         </div>
     </div>
+
+
 
 
     <button class="show-controls-btn visible" id="showControlsBtn">⚙</button>

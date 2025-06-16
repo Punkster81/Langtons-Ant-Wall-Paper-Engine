@@ -18,6 +18,7 @@ function resetIteration() {
         stepsPerSecond = getStepsPerSecond();
         secondsPerIteration = getIterationDuration();
         numberOfAnts = getAntCount();
+        tempOverrideSpeed = null;
 
         let width = window.innerWidth;
         let height = window.innerHeight;
@@ -65,12 +66,14 @@ function resetIteration() {
 }
 
 
-function setUpNewIteration() {
+function setUpNewIteration(data = null) {
     try {
         cellSize = getCellSize();
         stepsPerSecond = getStepsPerSecond();
         secondsPerIteration = getIterationDuration();
         numberOfAnts = getAntCount();
+        tempOverrideSpeed = null;
+
 
         let width = window.innerWidth;
         let height = window.innerHeight;
@@ -108,7 +111,12 @@ function setUpNewIteration() {
         const totalCells = cols * rows;
         document.getElementById('gridInfo').textContent = `${cols}x${rows} (${totalCells.toLocaleString()} cells)`;
 
-        createAnts();
+        if (!data) {
+            createAnts();
+        }
+        else {
+            createAntsFromRulesArray(data);
+        }
 
         return true;
     } catch (error) {

@@ -2,13 +2,75 @@
 
 
 
+
+// Timeout tracking
+let errorTimeout = null;
+let successTimeout = null;
+
+
 // Error handling
 function showError(message) {
+    const consoleMsg = document.getElementById("consoleMessge");
     const errorMsg = document.getElementById('errorMsg');
+    
     errorMsg.textContent = message;
-    setTimeout(() => {
+    consoleMsg.style.display = "block";
+    scrollToDiv('.controls', '.error');
+
+    // Clear previous timeout if any
+    if (errorTimeout) {
+        clearTimeout(errorTimeout);
+    }
+
+    errorTimeout = setTimeout(() => {
+        consoleMsg.style.display = "none";
         errorMsg.textContent = '';
-    }, 3000);
+        errorTimeout = null;
+    }, 5000);
+}
+
+// Success handling
+function showSuccess(message) {
+    const consoleMsg = document.getElementById("consoleMessge");
+    const successMsg = document.getElementById('successMsg');
+
+    successMsg.textContent = message;
+    consoleMsg.style.display = "block";
+    scrollToDiv('.controls', '.success');
+
+    // Clear previous timeout if any
+    if (successTimeout) {
+        clearTimeout(successTimeout);
+    }
+
+    successTimeout = setTimeout(() => {
+        consoleMsg.style.display = "none";
+        successMsg.textContent = '';
+        successTimeout = null;
+    }, 5000);
+}
+
+
+// Generic function to scroll a container to a specific div
+function scrollToDiv(containerSelector, targetDivSelector, options = {}) {
+    const container = document.querySelector(containerSelector);
+    const targetDiv = document.querySelector(targetDivSelector);
+
+    if (!container || !targetDiv) {
+        console.warn('Container or target div not found');
+        return;
+    }
+
+    const defaults = {
+        behavior: 'smooth',
+        block: 'start',
+        inline: 'nearest'
+    };
+
+    const scrollOptions = { ...defaults, ...options };
+
+    targetDiv.scrollIntoView(scrollOptions);
+    setupCustomScroll();
 }
 
 
@@ -16,19 +78,23 @@ function showError(message) {
 function toggleControls() {
     const controls = document.getElementById('controls');
     const showBtn = document.getElementById('showControlsBtn');
-
+    const statsMenu = document.getElementById('statsMenu')
 
 
     if (controls.classList.contains('controls-hidden')) {
 
         controls.classList.remove('controls-hidden');
+
+
         showBtn.classList.remove('visible');
 
     } else {
 
         controls.classList.add('controls-hidden');
+
         showBtn.classList.add('visible');
     }
+
 }
 
 
@@ -45,6 +111,19 @@ const maxSteps = 200000; // change in wallpaper.properties cause cant use varaia
 //assign buttons their functions
 function setUI() {
     // Keyboard shortcuts
+    //track stats
+    setInterval(() => {
+        if (document.getElementById("controls").classList.contains("controls-hidden")) return;
+
+        document.getElementById('frameTime').textContent = `${(1000 / loopDuration).toFixed(0)} FPS`;
+        document.getElementById('antCount').textContent = `${numberOfAnts} Ant(s)`;
+        document.getElementById('stepsTaken').textContent = `${stepsTaken} Step(s)`;
+        document.getElementById('stepsPerSecondStat').textContent = `${getTrueSpeed()} Step(s)`;
+
+
+
+    }, 100)
+
     adjustRadioGrids();
     document.addEventListener('keydown', function (e) {
         switch (e.key.toLowerCase()) {
@@ -134,7 +213,7 @@ function setUI() {
 
     document.getElementById('showAntCheckbox').addEventListener('change', function (e) {
         properties.showAnt = e.target.checked;
-        document.getElementById('antColorControl').style.display = properties.showAnt ? 'block' : 'none';  
+        document.getElementById('antColorControl').style.display = properties.showAnt ? 'block' : 'none';
     });
 
     //any input that starts with antColor
@@ -155,7 +234,6 @@ function setUI() {
 
     document.querySelectorAll('input[name="controlsLocation"]').forEach(function (radio) {
         radio.addEventListener('change', function (e) {
-            console.log('Controls location changed to:', e.target.value);
             properties.panelLocation = e.target.value;
             updatePanelLocation();
         });
@@ -668,6 +746,7 @@ function updateSecondsControls() {
 function updatePanelLocation() {
     const panel = document.querySelector('.controls'); // Changed to target .controls
     const showPanelBtn = document.querySelector('.show-controls-btn');
+    const statsMenu = document.getElementById('statsMenu');
 
     let locationRadio = document.querySelector(`input[name="controlsLocation"][value="${properties.panelLocation}"]`);
     if (locationRadio) {
@@ -686,21 +765,26 @@ function updatePanelLocation() {
         case 'topLeft':
             showPanelBtn.classList.add('top-left');
             panel.classList.add('top-left');
+
             break;
         case 'topRight':
             showPanelBtn.classList.add('top-right');
             panel.classList.add('top-right');
+
             break;
         case 'bottomLeft':
             showPanelBtn.classList.add('bottom-left');
             panel.classList.add('bottom-left');
+
             break;
         case 'bottomRight':
             showPanelBtn.classList.add('bottom-right');
             panel.classList.add('bottom-right');
+
             break;
     }
 }
+
 
 
 function updateAntsControls() {

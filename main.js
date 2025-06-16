@@ -9,6 +9,8 @@ document.addEventListener('DOMContentLoaded', function() {
   initializeWallPaperEngine();
   setUI();
 
+
+
   // Initialize
   if (setUpNewIteration()) {
     startAnimation();

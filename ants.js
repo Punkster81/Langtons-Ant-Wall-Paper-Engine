@@ -130,10 +130,6 @@ function addAnt(x, y, dir = Direction.UP, rules = {}, colors = []) {
 }
 
 
-// Get ant count
-function getAntsArrayLength() {
-    return ants.length;
-}
 
 // Clear all ants
 function clearAnts() {
@@ -205,6 +201,129 @@ function createAnts() {
                 addAnt(x, y, Direction.UP, rulesColors.rules, rulesColors.colors);
             }
             antCount++;
+        }
+    }
+}
+
+// Create multiple ants with improved row-based centering
+function createAnts() {
+    clearAnts(); // Start fresh
+
+    if (numberOfAnts <= 0) return;
+
+    // Calculate the center of the grid
+    const centerX = Math.floor(cols / 2);
+    const centerY = Math.floor(rows / 2);
+
+    // Special case: if only one ant, place it exactly in the center
+    if (numberOfAnts === 1) {
+        let sharedRulesColors = null;
+        if (!properties.differentRulesPerAnt) {
+            sharedRulesColors = generateRandomRules(getColorCount(), getStateCount());
+            addAnt(centerX, centerY, Direction.UP, sharedRulesColors.rules, sharedRulesColors.colors);
+        } else {
+            const rulesColors = generateRandomRules(getColorCount(), getStateCount());
+            addAnt(centerX, centerY, Direction.UP, rulesColors.rules, rulesColors.colors);
+        }
+        return;
+    }
+
+    // Calculate optimal row layout
+    const layout = calculateRowLayout(numberOfAnts, cols, rows);
+    
+    let antCount = 0;
+    let sharedRulesColors = null;
+
+    // Generate shared rules once if all ants use the same rules
+    if (!properties.differentRulesPerAnt) {
+        sharedRulesColors = generateRandomRules(getColorCount(), getStateCount());
+    }
+
+    // Position ants according to the calculated layout
+    for (let rowIndex = 0; rowIndex < layout.rowConfig.length && antCount < numberOfAnts; rowIndex++) {
+        const antsInThisRow = layout.rowConfig[rowIndex];
+        const rowY = centerY + layout.rowOffsets[rowIndex];
+        
+        // Calculate horizontal spacing for this row
+        const horizontalSpacing = antsInThisRow > 1 ? Math.min(cols / (antsInThisRow + 1), cols * 0.8 / antsInThisRow) : 0;
+        
+        for (let colIndex = 0; colIndex < antsInThisRow && antCount < numberOfAnts; colIndex++) {
+            let x;
+            if (antsInThisRow === 1) {
+                // Single ant in row - center it
+                x = centerX;
+            } else {
+                // Multiple ants - distribute evenly
+                const startX = centerX - (horizontalSpacing * (antsInThisRow - 1)) / 2;
+                x = Math.floor(startX + colIndex * horizontalSpacing);
+            }
+            
+            // Ensure ant stays within bounds
+            x = Math.max(0, Math.min(cols - 1, x));
+            const y = Math.max(0, Math.min(rows - 1, rowY));
+
+            if (!properties.differentRulesPerAnt) {
+                addAnt(x, y, Direction.UP, sharedRulesColors.rules, sharedRulesColors.colors);
+            } else {
+                const rulesColors = generateRandomRules(getColorCount(), getStateCount());
+                addAnt(x, y, Direction.UP, rulesColors.rules, rulesColors.colors);
+            }
+            antCount++;
+        }
+    }
+}
+
+// Create ants from a predefined array of rules and colors
+function createAntsFromRulesArray(rulesAndColorsArray) {
+    clearAnts(); // Start fresh
+
+    if (!rulesAndColorsArray || rulesAndColorsArray.length === 0) return;
+
+    const numAnts = rulesAndColorsArray.length;
+    
+    // Calculate the center of the grid
+    const centerX = Math.floor(cols / 2);
+    const centerY = Math.floor(rows / 2);
+
+    // Special case: if only one ant, place it exactly in the center
+    if (numAnts === 1) {
+        const config = rulesAndColorsArray[0];
+        addAnt(centerX, centerY, Direction.UP, config.rules, config.colors);
+        return;
+    }
+
+    // Calculate optimal row layout for the number of ants we have
+    const layout = calculateRowLayout(numAnts, cols, rows);
+    
+    let antIndex = 0;
+
+    // Position ants according to the calculated layout
+    for (let rowIndex = 0; rowIndex < layout.rowConfig.length && antIndex < numAnts; rowIndex++) {
+        const antsInThisRow = layout.rowConfig[rowIndex];
+        const rowY = centerY + layout.rowOffsets[rowIndex];
+        
+        // Calculate horizontal spacing for this row
+        const horizontalSpacing = antsInThisRow > 1 ? Math.min(cols / (antsInThisRow + 1), cols * 0.8 / antsInThisRow) : 0;
+        
+        for (let colIndex = 0; colIndex < antsInThisRow && antIndex < numAnts; colIndex++) {
+            let x;
+            if (antsInThisRow === 1) {
+                // Single ant in row - center it
+                x = centerX;
+            } else {
+                // Multiple ants - distribute evenly
+                const startX = centerX - (horizontalSpacing * (antsInThisRow - 1)) / 2;
+                x = Math.floor(startX + colIndex * horizontalSpacing);
+            }
+            
+            // Ensure ant stays within bounds
+            x = Math.max(0, Math.min(cols - 1, x));
+            const y = Math.max(0, Math.min(rows - 1, rowY));
+
+            // Use the specific rules and colors for this ant
+            const config = rulesAndColorsArray[antIndex];
+            addAnt(x, y, Direction.UP, config.rules, config.colors);
+            antIndex++;
         }
     }
 }
@@ -287,6 +406,7 @@ function recenterAnts() {
         }
     }
 }
+
 
 // Helper function to calculate optimal row layout
 function calculateRowLayout(totalAnts, gridCols, gridRows) {

@@ -168,9 +168,9 @@ function getColorCount() {
 }
 
 function getAntCount() {
-    if (properties.fixedNumberOfAnts) {
+    if (properties.antsMode=="fixedAnts") {
         return properties.fixedNumberOfAnts;
-    } else if (properties.minNumberOfAnts && properties.maxNumberOfAnts) {
+    } else if (properties.antsMode=="randomAnts") {
         let min = properties.minNumberOfAnts;
         let max = properties.maxNumberOfAnts;
         if (max < min) {

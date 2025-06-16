@@ -5,7 +5,7 @@ let isRunning = false;
 // Animation control functions
 function startAnimation() {
     document.getElementById('pauseResumeBtn').textContent = '⏸️';
-    if ( !isRunning) {
+    if (!isRunning) {
         isRunning = true;
         // Reset timestamp to avoid "catch up" spikes
         requestAnimationFrame(ts => {
@@ -28,7 +28,16 @@ function stopAnimation() {
 
 let lastTimestamp = null;
 let simulationStartTime = null;
+let tempOverrideSpeed = null;
 
+
+let loopDuration;
+
+let stepsTaken
+
+function getTrueSpeed(){
+    return tempOverrideSpeed ? tempOverrideSpeed : (properties.speedMode === 'fixedSpeed' ? getStepsPerSecond() : stepsPerSecond);
+}
 
 function animate(timestamp) {
     if (!isRunning) return;  // stop if paused
@@ -38,6 +47,7 @@ function animate(timestamp) {
     }
     if (!simulationStartTime) {
         simulationStartTime = timestamp; // Initialize simulation start time
+        stepsTaken = 0;
     }
 
     // Check if simulation duration exceeded
@@ -49,19 +59,40 @@ function animate(timestamp) {
 
     const elapsed = timestamp - lastTimestamp; //in ms
 
-    const interval = 1000 / (properties.speedMode === 'fixedSpeed' ? getStepsPerSecond() : stepsPerSecond); // ms per step //if fixed speed get fixed speed, if random, random is set at cavas resize, once per run dont get random every frame
+    const maxStepsPerSecond = getTrueSpeed();
+
+
+    const interval = 1000 / maxStepsPerSecond; // ms per step //if fixed speed get fixed speed, if random, random is set at cavas resize, once per run dont get random every frame
 
     if (elapsed >= interval) {
         const stepsToRun = Math.floor(elapsed / interval);
 
-
-         // CHANGED: Cap the maximum catch-up to 1 second worth of steps
-        const maxStepsPerSecond = (properties.speedMode === 'fixedSpeed' ? getStepsPerSecond() : stepsPerSecond);
+        // CHANGED: Cap the maximum catch-up to 1 second worth of steps
         const maxSteps = Math.min(stepsToRun, maxStepsPerSecond); // Cap to 1 second worth
+
+        // Start timing the ant stepping loop
+        const loopStartTime = performance.now();
 
         for (let i = 0; i < maxSteps && isRunning; i++) {
             ants.forEach(ant => ant && ant.step());
         }
+        stepsTaken+= maxSteps * ants.length;
+
+        // Check if the loop took too long and adjust speed accordingly
+        const loopEndTime = performance.now();
+        loopDuration = loopEndTime - loopStartTime;
+        const frameMaxThreshold = 200;
+        if (loopDuration > frameMaxThreshold) {
+            // Calculate scaling factor based on how far over the limit we are
+            const excessTime = loopDuration - frameMaxThreshold; // How much over
+
+            const scalingFactor = .10
+            const newSpeed = Math.max(1, Math.floor(maxStepsPerSecond * (1-scalingFactor)));
+            tempOverrideSpeed = newSpeed;
+
+            showError(`Performance adjustment: Loop took ${loopDuration.toFixed(2)}ms (${excessTime.toFixed(2)}ms over limit), reducing speed by ${scalingFactor*100}% to ${tempOverrideSpeed} from ${maxStepsPerSecond} steps/sec`);
+        }
+
         // CHANGED: If we hit the cap, reset timing to prevent further catch-up
         if (stepsToRun > maxSteps) {
             // We hit the cap, so reset timing to current time (skip excess frames)

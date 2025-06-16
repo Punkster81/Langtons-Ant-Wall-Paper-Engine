@@ -147,34 +147,23 @@ function generateRandomRules(numColors, numStates) {
 
 function exportJSON() {
 
-    let data = null;
+    let data = [];
 
-    if(getAntsArrayLength() === 0) {
+    if (ants.length === 0) {
         showError("No ants to export.");
         return;
     }
 
-    if(!properties.differentRulesPerAnt || getAntsArrayLength() === 1) {
-        if(ants[0])
-        data = { rules: ants[0].rules, colors: ants[0].colors };
-    }
-    else {
-        data = [];
-        ants.forEach(ant => {
-            data.push({ rules: ant.rules, colors: ant.colors });
-        });
-    }
+
+    ants.forEach(ant => {
+        data.push({ rules: ant.rules, colors: ant.colors });
+    });
+
 
     const jsonStr = JSON.stringify(data, null, 2);
-    const blob = new Blob([jsonStr], { type: "application/json" });
-    const url = URL.createObjectURL(blob);
-
-    const a = document.createElement("a");
-    a.href = url;
-    a.download = "langtons-ant-config.json";
-    a.click();
-
-    URL.revokeObjectURL(url);
+    navigator.clipboard.writeText(jsonStr).then(() => {
+        showSuccess("Configuration copied to clipboard!");
+    });
 }
 
 function importJSON(event) {
@@ -184,23 +173,24 @@ function importJSON(event) {
     const reader = new FileReader();
     reader.onload = function (e) {
         try {
-            const data = JSON.parse(e.target.result);
+            let data = JSON.parse(e.target.result);
 
-            if(Array.isArray(data)) {
-                // Handle array of ants
-                data.forEach(ant => {
-                    if (ant.rules) rules = ant.rules;
-                    if (ant.colors) colors = ant.colors;
+            if (!Array.isArray(data)) {
+                //data is not object
+                if (typeof data !== 'object' || data.rules === undefined || data.colors === undefined) {
+                    showError("Invalid JSON structure. Expected an array of objects with 'rules' and 'colors' properties.");
+                    return;
+                }
+                let tempData = [];
+                tempData.push({
+                    rules: data.rules,
+                    colors: data.colors
                 });
+                data = tempData;
             }
 
-            // Apply settings from imported JSON
-            if (data.rules) rules = data.rules;
-            if (data.colors) colors = data.colors;
 
-            // Optionally reinitialize
-
-            setUpNewIteration();
+            setUpNewIteration(data);
             const input = document.getElementById('jsonFileInput');
             input.value = ''; // Clear the previously selected file
         } catch (error) {

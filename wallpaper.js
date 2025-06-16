@@ -109,6 +109,10 @@ window.wallpaperPropertyListener = {
             properties.differentRulesPerAnt = userProperties.eachantdifferentrules.value;
         }
 
+        if( userProperties.antsmode !== undefined){
+            properties.antsMode = userProperties.antsmode.value;
+        }
+
         // Seconds per Iteration Properties
         if (userProperties.secondsperiterationmode !== undefined) {
             properties.secondsPerIterationMode = userProperties.secondsperiterationmode.value;
