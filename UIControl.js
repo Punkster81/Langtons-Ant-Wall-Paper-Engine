@@ -275,12 +275,16 @@ function adjustRadioGrids() {
     });
 }
 
-
+let customScrollSetup = false
 function setupCustomScroll() {
     const controlsContent = document.getElementById('controlsContent');
     const scrollUpBtn = document.getElementById('scrollUpBtn');
     const scrollDownBtn = document.getElementById('scrollDownBtn');
 
+    if(customScrollSetup){
+        return;
+    }
+    customScrollSetup=true;
     function updateScrollButtons() {
         controlsContent.offsetHeight; // This line forces the browser to recalculate
 
