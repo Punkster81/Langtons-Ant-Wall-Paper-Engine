@@ -117,7 +117,7 @@ function setUI() {
         document.getElementById('frameTime').textContent = `${(1000 / loopDuration).toFixed(0)} FPS`;
         document.getElementById('antCount').textContent = `${numberOfAnts} Ant(s)`;
         document.getElementById('stepsTaken').textContent = `${stepsTaken} Step(s)`;
-        document.getElementById('stepsPerSecondStat').textContent = `${getTrueSpeed()} Step(s)`;
+        document.getElementById('stepsPerSecondStat').textContent = `${stepsPerSecond} Step(s)`;
 
 
 
@@ -492,6 +492,7 @@ function updateStepsControls() {
         // Event listener for fixed speed
         document.getElementById('stepsSlider').addEventListener('input', function (e) {
             properties.fixedSpeed = parseInt(e.target.value);
+            stepsPerSecond = properties.fixedSpeed;
             document.getElementById('stepsValue').textContent = properties.fixedSpeed;
         });
 

@@ -128,17 +128,6 @@ function setUpNewIteration(data = null) {
 
 
 
-const Turn = {
-    LEFT: 'L',
-    RIGHT: 'R',
-    STRAIGHT: 'N',  // Forward (no turn)
-    BACK: 'U', //uturn
-    STAY: 'S'
-};
-
-const moves = ['L', 'R', 'N', 'U', 'S']; // Left, Right, Straight, Back, Stay
-
-
 
 
 

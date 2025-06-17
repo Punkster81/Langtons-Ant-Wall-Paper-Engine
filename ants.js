@@ -9,6 +9,19 @@ const Direction = {
     count: 4
 };
 
+const Turn = {
+    LEFT: 'L',
+    RIGHT: 'R',
+    FORWARD: 'F',  // Forward 
+    BACKWARD: 'B', //uturn
+    STAY: 'S'
+};
+
+const moves = ['L', 'R', 'F', 'B', 'S']; // Left, Right, Straight, Back, Stay
+
+
+
+
 // Your original ant structure
 class Ant {
     constructor(x, y, dir, state, rules, colors) {
@@ -63,10 +76,10 @@ class Ant {
                 case Turn.RIGHT:
                     this.dir = (this.dir + 1) % 4;
                     break;
-                case Turn.BACK:
+                case Turn.BACKWARD:
                     this.dir = (this.dir + 2) % 4;
                     break;
-                case Turn.STRAIGHT:
+                case Turn.FORWARD:
                     //shouldMove = true;
                     break;
                 case Turn.STAY:

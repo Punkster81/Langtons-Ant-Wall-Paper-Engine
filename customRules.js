@@ -166,9 +166,21 @@ function exportJSON() {
     });
 }
 
+
+function openFileDialog() {
+    const input = document.getElementById('jsonFileInput');
+    // Clear the value BEFORE opening the dialog
+    input.value = '';
+    input.click();
+}
+
 function importJSON(event) {
     const file = event.target.files[0];
-    if (!file) return;
+    if (!file) {
+        // User cancelled - clear the input to ensure next click works
+        event.target.value = '';
+        return;
+    }
 
     const reader = new FileReader();
     reader.onload = function (e) {
@@ -179,23 +191,56 @@ function importJSON(event) {
                 //data is not object
                 if (typeof data !== 'object' || data.rules === undefined || data.colors === undefined) {
                     showError("Invalid JSON structure. Expected an array of objects with 'rules' and 'colors' properties.");
+                    // Clear input even on error
+                    event.target.value = '';
                     return;
                 }
+
+
                 let tempData = [];
                 tempData.push({
                     rules: data.rules,
                     colors: data.colors
                 });
+
                 data = tempData;
             }
 
+            //check to make sure each ant has apporiate number of colors, if not give them colors, using the colors already given plus new colors
+            data.forEach((item) => {
+                // Initialize colors array if it doesn't exist
+                if (!item.colors) {
+                    item.colors = [];
+                }
 
-            setUpNewIteration(data);
-            const input = document.getElementById('jsonFileInput');
-            input.value = ''; // Clear the previously selected file
+                if (item.colors.length != item.rules["0"].length) {
+                    let tempColors = generateDistinctColors(item.rules["0"].length);
+
+                    // Merge existing colors with new ones
+                    let mergedColors = [...item.colors]; // Start with existing colors
+
+                    // Add remaining colors from tempColors (skip the first item.colors.length)
+                    for (let i = item.colors.length; i < tempColors.length; i++) {
+                        mergedColors.push(tempColors[i]);
+                    }
+
+                    item.colors = mergedColors;
+                }
+            });
+
+            newSimulation(data);
+
         } catch (error) {
             showError("Invalid JSON file: " + error.message);
+        } finally {
+            // Always clear the input after processing (success or error)
+            event.target.value = '';
         }
+    };
+
+    reader.onerror = function () {
+        showError("Error reading file");
+        event.target.value = '';
     };
 
     reader.readAsText(file);

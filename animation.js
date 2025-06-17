@@ -115,10 +115,10 @@ function resetSimulation() {
 }
 
 
-function newSimulation() {
+function newSimulation(data = null) {
     stopAnimation();
     simulationStartTime = null;
-    if (setUpNewIteration()) {
+    if (setUpNewIteration(data)) {
         startAnimation();
     }
 }
