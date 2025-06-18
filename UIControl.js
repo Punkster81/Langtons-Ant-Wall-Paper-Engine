@@ -8,46 +8,47 @@ let errorTimeout = null;
 let successTimeout = null;
 
 
-// Error handling
+// Alternative: Use requestAnimationFrame for better performance
 function showError(message) {
-    const consoleMsg = document.getElementById("consoleMessge");
-    const errorMsg = document.getElementById('errorMsg');
+    requestAnimationFrame(() => {
+        const consoleMsg = document.getElementById("consoleMessge");
+        const errorMsg = document.getElementById('errorMsg');
 
-    errorMsg.textContent = message;
-    consoleMsg.style.display = "block";
-    scrollToDiv('.controls', '.error');
+        errorMsg.textContent = message;
+        consoleMsg.style.display = "block";
+        scrollToDiv('.controls', '.error');
 
-    // Clear previous timeout if any
-    if (errorTimeout) {
-        clearTimeout(errorTimeout);
-    }
+        if (errorTimeout) {
+            clearTimeout(errorTimeout);
+        }
 
-    errorTimeout = setTimeout(() => {
-        consoleMsg.style.display = "none";
-        errorMsg.textContent = '';
-        errorTimeout = null;
-    }, 5000);
+        errorTimeout = setTimeout(() => {
+            consoleMsg.style.display = "none";
+            errorMsg.textContent = '';
+            errorTimeout = null;
+        }, 5000);
+    });
 }
 
-// Success handling
 function showSuccess(message) {
-    const consoleMsg = document.getElementById("consoleMessge");
-    const successMsg = document.getElementById('successMsg');
+    requestAnimationFrame(() => {
+        const consoleMsg = document.getElementById("consoleMessge");
+        const successMsg = document.getElementById('successMsg');
 
-    successMsg.textContent = message;
-    consoleMsg.style.display = "block";
-    scrollToDiv('.controls', '.success');
+        successMsg.textContent = message;
+        consoleMsg.style.display = "block";
+        scrollToDiv('.controls', '.success');
 
-    // Clear previous timeout if any
-    if (successTimeout) {
-        clearTimeout(successTimeout);
-    }
+        if (successTimeout) {
+            clearTimeout(successTimeout);
+        }
 
-    successTimeout = setTimeout(() => {
-        consoleMsg.style.display = "none";
-        successMsg.textContent = '';
-        successTimeout = null;
-    }, 5000);
+        successTimeout = setTimeout(() => {
+            consoleMsg.style.display = "none";
+            successMsg.textContent = '';
+            successTimeout = null;
+        }, 5000);
+    });
 }
 
 
@@ -113,13 +114,11 @@ function setUI() {
     //track stats
     setInterval(() => {
         if (document.getElementById("controls").classList.contains("controls-hidden")) return;
-
-        document.getElementById('frameTime').textContent = `${(1000 / loopDuration).toFixed(0)} FPS`;
+        document.getElementById('fps').textContent = `${(currentFPS).toFixed(0)} FPS`;
+        document.getElementById('frameTime').textContent = `${(loopDuration).toFixed(2)} ms`;
         document.getElementById('antCount').textContent = `${numberOfAnts} Ant(s)`;
         document.getElementById('stepsTaken').textContent = `${stepsTaken} Step(s)`;
-        document.getElementById('stepsPerSecondStat').textContent = `${stepsPerSecond} Step(s)`;
-
-
+        document.getElementById('stepsPerSecondStat').textContent = `${tempOverrideSpeed ?? stepsPerSecond} Step(s)`;
 
     }, 100)
 
@@ -802,6 +801,10 @@ function updateAntsControls() {
     let randomrules = document.getElementById('antRulesCheckbox');
     if (randomrules) {
         randomrules.checked = properties.differentRulesPerAnt;
+    }
+    let antColors = document.getElementById('antColorControl');
+    if (antColors) {
+        antColors.style.display = properties.showAnt ? 'block' : 'none';
     }
 
     if (properties.antsMode === 'fixedAnts') {

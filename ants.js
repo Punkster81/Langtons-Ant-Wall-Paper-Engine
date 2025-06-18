@@ -9,6 +9,13 @@ const Direction = {
     count: 4
 };
 
+directionVectors = [
+    [0, -1], // UP: Direction.UP = 0
+    [1, 0],  // RIGHT: Direction.RIGHT = 1  
+    [0, 1],  // DOWN: Direction.DOWN = 2
+    [-1, 0]  // LEFT: Direction.LEFT = 3
+];
+
 const Turn = {
     LEFT: 'L',
     RIGHT: 'R',
@@ -35,90 +42,66 @@ class Ant {
 
     // Step function: perform one ant step
     step() {
-        try {
 
-            if (this.y < 0 || this.y >= rows || this.x < 0 || this.x >= cols) {
-                this.x = (this.x + cols) % cols;
-                this.y = (this.y + rows) % rows;
-                return;
-            }
-
-            const cellColor = grid[this.y][this.x];
-            const stateRules = this.rules[this.state]
-            if (!stateRules) {
-                showError(`Missing rule for state ${this.state}`);
-                stopAnimation();
-                return;
-            }
-            
-
-            const rule = stateRules[cellColor] || stateRules[0];//default if ant doesnt know that color treat it as first color, always black 
-
-            // Write new color
-            grid[this.y][this.x] = rule.writeColor;
-            ctx.fillStyle = this.colors[rule.writeColor];
-            ctx.fillRect(
-                Math.floor(this.x * cellSize),
-                Math.floor(this.y * cellSize),
-                Math.ceil(cellSize),
-                Math.ceil(cellSize)
-            );
-
-
-            // Change direction
-            const move = rule.move;
-            let shouldMove = true;
-
-            switch (move) {
-                case Turn.LEFT:
-                    this.dir = (this.dir + 3) % 4; // -1 mod 4
-                    break;
-                case Turn.RIGHT:
-                    this.dir = (this.dir + 1) % 4;
-                    break;
-                case Turn.BACKWARD:
-                    this.dir = (this.dir + 2) % 4;
-                    break;
-                case Turn.FORWARD:
-                    //shouldMove = true;
-                    break;
-                case Turn.STAY:
-                    shouldMove = false; // Cancel movement
-                    break;
-            }
-
-
-            // Move ant
-            if (shouldMove) {
-                switch (this.dir) {
-                    case Direction.UP:
-                        this.y--;
-                        break;
-                    case Direction.RIGHT:
-                        this.x++;
-                        break;
-                    case Direction.DOWN:
-                        this.y++;
-                        break;
-                    case Direction.LEFT:
-                        this.x--;
-                        break;
-                }
-            }
-
-            this.x = (this.x + cols) % cols;
-            this.y = (this.y + rows) % rows;
-
-            if (properties.showAnt) {
-                this.drawAnt();
-            }
-
-            // Change to next state
-            this.state = rule.nextState || 0;
-        } catch (error) {
-            showError("Error Stepping: " + error);
+        const cellColor = grid[this.y][this.x];
+        const stateRules = this.rules[this.state]
+        if (!stateRules) {
+            showError(`Missing rule for state ${this.state}`);
+            stopAnimation();
+            return;
         }
 
+
+        const rule = stateRules[cellColor] || stateRules[0];//default if ant doesnt know that color treat it as first color, always black 
+
+        // Write new color
+        grid[this.y][this.x] = rule.writeColor;
+        ctx.fillStyle = this.colors[rule.writeColor];
+        ctx.fillRect(
+            Math.floor(this.x * cellSize),
+            Math.floor(this.y * cellSize),
+            Math.ceil(cellSize),
+            Math.ceil(cellSize)
+        );
+
+
+        // Change direction
+        const move = rule.move;
+        let shouldMove = true;
+
+        switch (move) {
+            case Turn.LEFT:
+                this.dir = (this.dir + 3) % 4; // -1 mod 4
+                break;
+            case Turn.RIGHT:
+                this.dir = (this.dir + 1) % 4;
+                break;
+            case Turn.BACKWARD:
+                this.dir = (this.dir + 2) % 4;
+                break;
+            case Turn.FORWARD:
+                //shouldMove = true;
+                break;
+            case Turn.STAY:
+                shouldMove = false; // Cancel movement
+                break;
+        }
+
+
+        // Move ant
+        if (shouldMove) {
+            const [dx, dy] = directionVectors[this.dir];
+            this.x = (this.x + dx + cols) % cols;
+            this.y = (this.y + dy + rows) % rows;
+        }
+
+
+        if (properties.showAnt) {
+            this.drawAnt();
+        }
+
+        // Change to next state
+        this.state = rule.nextState || 0;
     }
 
     drawAnt() {
