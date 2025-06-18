@@ -86,6 +86,7 @@ function animate(timestamp) {
         for (let i = 0; i < maxSteps && isRunning; i++) {
             ants.forEach(ant => ant && ant.step());
         }
+        ants.forEach(ant => ant && ant.drawAnt());
         stepsTaken += maxSteps * ants.length;
 
         const loopEndTime = performance.now();

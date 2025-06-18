@@ -96,23 +96,22 @@ class Ant {
         }
 
 
-        if (properties.showAnt) {
-            this.drawAnt();
-        }
+
 
         // Change to next state
         this.state = rule.nextState || 0;
     }
 
     drawAnt() {
-        if (cellSize <= 1) return; // Too small to draw ant visibly
+        if (properties.showAnt && cellSize <= 1) return; // Too small to draw ant visibly
+        const halfCell = cellSize*.5;
 
-        const px = this.x * cellSize + cellSize / 2;
-        const py = this.y * cellSize + cellSize / 2;
-        const radius = cellSize / 2;
+        const px = this.x * cellSize + halfCell;
+        const py = this.y * cellSize + halfCell;
+        const radius = halfCell;
 
         ctx.beginPath();
-        ctx.arc(px, py, radius, 0, 2 * Math.PI);
+        ctx.arc(px, py, radius, 0, 6.283185307179586);//6.283185307179586 is 2*pi
         ctx.fillStyle = properties.antColor ? `rgb(${properties.antColor.r}, ${properties.antColor.g}, ${properties.antColor.b})` : '#FF0000';
         ctx.fill();
     }

@@ -26,7 +26,7 @@ const properties = {
 
     // Ant(s)
     showAnt: true,
-    antColor: { r: 255, g: 0, b: 0 },
+    antColor: "#FF0000",
     antsMode: 'fixedAnts',
     fixedNumberOfAnts: 1,
     minNumberOfAnts: 1,

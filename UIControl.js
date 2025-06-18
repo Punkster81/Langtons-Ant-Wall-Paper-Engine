@@ -220,11 +220,12 @@ function setUI() {
             const rInput = document.getElementById('antColorR');
             const gInput = document.getElementById('antColorG');
             const bInput = document.getElementById('antColorB');
-            properties.antColor = {
-                r: parseInt(rInput.value),
-                g: parseInt(gInput.value),
-                b: parseInt(bInput.value)
-            };
+            const r = parseInt(rInput.value);
+            const g = parseInt(gInput.value);
+            const b = parseInt(bInput.value);
+
+            properties.antColor = `#${[r, g, b].map(c => c.toString(16).padStart(2, '0')).join('')}`;
+
         });
     });
 
@@ -280,10 +281,10 @@ function setupCustomScroll() {
     const scrollUpBtn = document.getElementById('scrollUpBtn');
     const scrollDownBtn = document.getElementById('scrollDownBtn');
 
-    if(customScrollSetup){
+    if (customScrollSetup) {
         return;
     }
-    customScrollSetup=true;
+    customScrollSetup = true;
     function updateScrollButtons() {
         controlsContent.offsetHeight; // This line forces the browser to recalculate
 
@@ -875,7 +876,12 @@ function updateAntsControls() {
     }
 }
 function updateAntsColor() {
-    document.getElementById('antColorR').value = properties.antColor.r;
-    document.getElementById('antColorG').value = properties.antColor.g;
-    document.getElementById('antColorB').value = properties.antColor.b;
+    const hex = properties.antColor.replace('#', '');
+    const r = parseInt(hex.substring(0, 2), 16);
+    const g = parseInt(hex.substring(2, 4), 16);
+    const b = parseInt(hex.substring(4, 6), 16);
+
+    document.getElementById('antColorR').value = r;
+    document.getElementById('antColorG').value = g;
+    document.getElementById('antColorB').value = b;
 }
