@@ -55,7 +55,6 @@ function animate(timestamp) {
     }
 
     // Calculate frame time (time between frames)
-    const frameTime = timestamp - lastFrameTime;
     lastFrameTime = timestamp;
 
     if (!lastTimestamp) {
@@ -82,12 +81,27 @@ function animate(timestamp) {
 
         // Measure ant stepping performance (NOT FPS)
         const loopStartTime = performance.now();
+        const antsLength = ants.length;
 
         for (let i = 0; i < maxSteps && isRunning; i++) {
-            ants.forEach(ant => ant && ant.step());
+            for (let antIndex = 0; antIndex < antsLength; antIndex++) {
+                const ant = ants[antIndex];
+                if (ant) {
+                    ant.step();
+                    stepsTaken++;
+                }
+            }
         }
-        ants.forEach(ant => ant && ant.drawAnt());
-        stepsTaken += maxSteps * ants.length;
+        if (properties.showAnt && cellSize > 1) {
+            ctx.save(); // Save context state once
+            for (let antIndex = 0; antIndex < antsLength; antIndex++) {
+                const ant = ants[antIndex];
+                if (ant) {
+                    ant.drawAnt();
+                }
+            }
+            ctx.restore(); // Restore context state once
+        }
 
         const loopEndTime = performance.now();
         loopDuration = loopEndTime - loopStartTime;
@@ -104,11 +118,8 @@ function animate(timestamp) {
         }
 
         // Timing adjustment
-        if (stepsToRun > maxSteps) {
-            lastTimestamp = timestamp;
-        } else {
-            lastTimestamp = timestamp - (elapsed % interval);
-        }
+        lastTimestamp = stepsToRun > maxSteps ? timestamp : timestamp - (elapsed % interval);
+
     }
 
     animationId = requestAnimationFrame(animate);

@@ -43,7 +43,9 @@ class Ant {
     // Step function: perform one ant step
     step() {
 
-        const cellColor = grid[this.y][this.x];
+        const currentRow = grid[this.y];
+        const cellColor = currentRow[this.x];
+
         const stateRules = this.rules[this.state]
         if (!stateRules) {
             showError(`Missing rule for state ${this.state}`);
@@ -54,45 +56,49 @@ class Ant {
 
         const rule = stateRules[cellColor] || stateRules[0];//default if ant doesnt know that color treat it as first color, always black 
 
-        // Write new color
-        grid[this.y][this.x] = rule.writeColor;
-        ctx.fillStyle = this.colors[rule.writeColor];
-        ctx.fillRect(
-            Math.floor(this.x * cellSize),
-            Math.floor(this.y * cellSize),
-            Math.ceil(cellSize),
-            Math.ceil(cellSize)
-        );
+        const newColor = rule.writeColor;
+        if (properties.showAnt || cellColor !== newColor) { // Only update if color actually changed or if using ant, leaves after image of ants otherwise
+            currentRow[this.x] = newColor;
+
+            // Use integer pixel coordinates for better performance
+            const pixelX = Math.floor(this.x * cellSize);
+            const pixelY = Math.floor(this.y * cellSize);
+            const pixelSize = Math.ceil(cellSize);
+
+            ctx.fillStyle = this.colors[newColor];
+            ctx.fillRect(pixelX, pixelY, pixelSize, pixelSize);
+        }
 
 
         // Change direction
         const move = rule.move;
         let shouldMove = true;
 
+        // Pre-calculated direction changes for better performance
         switch (move) {
             case Turn.LEFT:
-                this.dir = (this.dir + 3) % 4; // -1 mod 4
+                this.dir = (this.dir + 3) & 3; // Bitwise AND is faster than modulo for powers of 2
                 break;
             case Turn.RIGHT:
-                this.dir = (this.dir + 1) % 4;
+                this.dir = (this.dir + 1) & 3;
                 break;
             case Turn.BACKWARD:
-                this.dir = (this.dir + 2) % 4;
+                this.dir = (this.dir + 2) & 3;
                 break;
             case Turn.FORWARD:
-                //shouldMove = true;
+                // No direction change needed
                 break;
             case Turn.STAY:
-                shouldMove = false; // Cancel movement
+                shouldMove = false;
                 break;
         }
 
 
         // Move ant
         if (shouldMove) {
-            const [dx, dy] = directionVectors[this.dir];
-            this.x = (this.x + dx + cols) % cols;
-            this.y = (this.y + dy + rows) % rows;
+            const dirVector = directionVectors[this.dir];
+            this.x = (this.x + dirVector[0] + cols) % cols;
+            this.y = (this.y + dirVector[1] + rows) % rows;
         }
 
 
@@ -104,7 +110,7 @@ class Ant {
 
     drawAnt() {
         if (properties.showAnt && cellSize <= 1) return; // Too small to draw ant visibly
-        const halfCell = cellSize*.5;
+        const halfCell = cellSize * .5;
 
         const px = this.x * cellSize + halfCell;
         const py = this.y * cellSize + halfCell;
@@ -112,7 +118,7 @@ class Ant {
 
         ctx.beginPath();
         ctx.arc(px, py, radius, 0, 6.283185307179586);//6.283185307179586 is 2*pi
-        ctx.fillStyle = properties.antColor ? `rgb(${properties.antColor.r}, ${properties.antColor.g}, ${properties.antColor.b})` : '#FF0000';
+        ctx.fillStyle = properties.antColor ?? '#FF0000';
         ctx.fill();
     }
 };

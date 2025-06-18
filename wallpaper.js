@@ -1,14 +1,16 @@
 
 
-// Convert Wallpaper Engine color format to RGB object
+// Convert Wallpaper Engine color format to hex string
 function parseColor(colorString) {
     const parts = colorString.split(' ');
-    return {
-        r: Math.round(parseFloat(parts[0]) * 255),
-        g: Math.round(parseFloat(parts[1]) * 255),
-        b: Math.round(parseFloat(parts[2]) * 255)
-    };
+    const r = Math.round(parseFloat(parts[0]) * 255);
+    const g = Math.round(parseFloat(parts[1]) * 255);
+    const b = Math.round(parseFloat(parts[2]) * 255);
+
+    // Convert each component to a two-digit hex string and combine
+    return `#${[r, g, b].map(c => c.toString(16).padStart(2, '0')).join('')}`;
 }
+
 
 // Property listener - just store values
 window.wallpaperPropertyListener = {
