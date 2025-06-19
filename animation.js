@@ -93,14 +93,12 @@ function animate(timestamp) {
             }
         }
         if (properties.showAnt && cellSize > 1) {
-            ctx.save(); // Save context state once
             for (let antIndex = 0; antIndex < antsLength; antIndex++) {
                 const ant = ants[antIndex];
                 if (ant) {
                     ant.drawAnt();
                 }
             }
-            ctx.restore(); // Restore context state once
         }
 
         const loopEndTime = performance.now();
