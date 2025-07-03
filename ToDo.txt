@@ -1,0 +1,10 @@
+Objectpool for batched drawing
+or try single image update for drawing
+
+change multiple ant layout to look better?
+
+make sure ants dont leave after-image (circle bits in other cells) at certian pixel sizes
+
+make "small grid" warning not pop up every new run only on window resize
+
+change input to take txt as well///already does but make it auto selected file type
